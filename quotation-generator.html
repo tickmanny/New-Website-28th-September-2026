@@ -102,7 +102,23 @@ section{scroll-margin-top:105px}
 .qg-card-body{display:flex;flex-direction:column;flex:1;padding:24px 24px 25px}
 .qg-card-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 .qg-card-title{margin:0;font-family:var(--display);font-size:25px;line-height:1.03;font-weight:600;letter-spacing:-.04em}
-.qg-arrow{font-size:18px;line-height:1;transition:transform .22s ease;color:var(--lf-red)}
+/* Directional arrows: draw with SVG/vector strokes instead of Unicode glyphs.
+       This prevents iOS Safari from rendering ↗ as a colored emoji. */
+    .arrow,.qg-arrow{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:16px;height:16px;flex:0 0 16px;
+      line-height:0;color:currentColor;
+      vertical-align:middle;
+    }
+    .arrow-svg{display:block;width:100%;height:100%;overflow:visible;}
+    .arrow-svg path{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+    .scroll-arrow{
+      display:inline-block;width:8px;height:8px;
+      margin-left:2px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+      transform:rotate(45deg) translateY(-2px);
+      vertical-align:middle;
+    }
+    .qg-arrow{transition:transform .22s ease;color:var(--lf-red)}
 .qg-card:hover .qg-arrow{transform:translate(3px,-3px)}
 .qg-card-copy{margin:11px 0 0;color:#6b6964;font-size:14px;line-height:1.7}
 .qg-status{display:flex;align-items:center;gap:7px;margin-top:auto;padding-top:18px;color:#77736d;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
@@ -294,7 +310,7 @@ section{scroll-margin-top:105px}
 <span class="qg-label">Instant estimate</span>
 </div>
 <div class="qg-card-body">
-<div class="qg-card-title-row"><h3 class="qg-card-title">Kitchen</h3><span class="qg-arrow">↗</span></div>
+<div class="qg-card-title-row"><h3 class="qg-card-title">Kitchen</h3><span class="qg-arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></div>
 <p class="qg-card-copy">Cabinetry, worktops, layouts and selected extras.</p>
 <div class="qg-status live"><span class="qg-status-dot"></span>Start calculator</div>
 </div>
@@ -306,7 +322,7 @@ section{scroll-margin-top:105px}
 <span class="qg-label">Instant estimate</span>
 </div>
 <div class="qg-card-body">
-<div class="qg-card-title-row"><h3 class="qg-card-title">TV Unit</h3><span class="qg-arrow">↗</span></div>
+<div class="qg-card-title-row"><h3 class="qg-card-title">TV Unit</h3><span class="qg-arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></div>
 <p class="qg-card-copy">Custom media units, storage, mounting and finishing.</p>
 <div class="qg-status live"><span class="qg-status-dot"></span>Start calculator</div>
 </div>
@@ -318,7 +334,7 @@ section{scroll-margin-top:105px}
 <span class="qg-label">Instant estimate</span>
 </div>
 <div class="qg-card-body">
-<div class="qg-card-title-row"><h3 class="qg-card-title">Wardrobe</h3><span class="qg-arrow">↗</span></div>
+<div class="qg-card-title-row"><h3 class="qg-card-title">Wardrobe</h3><span class="qg-arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></div>
 <p class="qg-card-copy">Built-in wardrobes designed around your room and storage needs.</p>
 <div class="qg-status live"><span class="qg-status-dot"></span>Start calculator</div>
 </div>
@@ -330,7 +346,7 @@ section{scroll-margin-top:105px}
 <span class="qg-label">Instant estimate</span>
 </div>
 <div class="qg-card-body">
-<div class="qg-card-title-row"><h3 class="qg-card-title">Bathroom Renovation</h3><span class="qg-arrow">↗</span></div>
+<div class="qg-card-title-row"><h3 class="qg-card-title">Bathroom Renovation</h3><span class="qg-arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></div>
 <p class="qg-card-copy">Bathroom layouts, fittings, plumbing, electrical work and finishes.</p>
 <div class="qg-status live"><span class="qg-status-dot"></span>Start calculator</div>
 </div>
@@ -342,7 +358,7 @@ section{scroll-margin-top:105px}
 <span class="qg-label">Complete project</span>
 </div>
 <div class="qg-card-body">
-<div class="qg-card-title-row"><h3 class="qg-card-title">Full Renovation</h3><span class="qg-arrow">↗</span></div>
+<div class="qg-card-title-row"><h3 class="qg-card-title">Full Renovation</h3><span class="qg-arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></div>
 <p class="qg-card-copy">A complete property transformation from design through construction and handover.</p>
 <div class="qg-status"><span class="qg-status-dot"></span>Contact us</div>
 </div>
@@ -354,7 +370,7 @@ section{scroll-margin-top:105px}
 <span class="qg-label">Selected areas</span>
 </div>
 <div class="qg-card-body">
-<div class="qg-card-title-row"><h3 class="qg-card-title">Partial Renovation</h3><span class="qg-arrow">↗</span></div>
+<div class="qg-card-title-row"><h3 class="qg-card-title">Partial Renovation</h3><span class="qg-arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></div>
 <p class="qg-card-copy">Renovate specific rooms or areas without taking on a full-property renovation.</p>
 <div class="qg-status"><span class="qg-status-dot"></span>Contact us</div>
 </div>
@@ -392,7 +408,7 @@ section{scroll-margin-top:105px}
 <h2 class="qg-cta-title reveal">Some projects need a more tailored quotation.</h2>
 <div class="reveal">
 <p class="qg-cta-copy">For full and partial renovations, contact us directly and we’ll discuss the scope, requirements and next steps with you.</p>
-<a class="qg-cta-btn" href="contact.html">Contact us ↗</a>
+<a class="qg-cta-btn" href="contact.html">Contact us <span class="arrow inline-arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></a>
 </div>
 </div>
 </section>
