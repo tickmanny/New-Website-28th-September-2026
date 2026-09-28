@@ -93,8 +93,12 @@
     .service-action:hover{transform:translateY(-1px);background:#292927;border-color:#292927;color:#fff}
     .service-action.primary{background:#292927;border-color:#292927;color:#fff}
     .service-action.primary:hover{background:#1d1d1b;border-color:#1d1d1b}
-    .service-action.whatsapp::before{content:'';display:inline-block;width:10px;height:10px;margin-right:8px;color:var(--red);border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;position:relative;top:1px}.service-action.whatsapp::after{content:'';display:inline-block;width:9px;height:1.5px;background:currentColor;transform:rotate(-45deg);transform-origin:left center;position:relative;left:-17px;top:-2px;margin-right:-9px}
-    .service-action.primary.whatsapp::before{color:#fff}
+    .lf-arrow{display:inline-flex;align-items:center;justify-content:center;line-height:0;color:currentColor}
+    .lf-arrow svg{display:block;width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .hero-link .lf-arrow{width:16px;height:16px;color:var(--red)}
+    .cta-btn .lf-arrow{width:16px;height:16px;color:currentColor}
+    .service-action.whatsapp .lf-arrow{margin-right:6px;color:var(--red);flex:0 0 auto}
+    .service-action.primary.whatsapp .lf-arrow{color:#fff}
 
     .process{width:100%;padding:88px 0 92px;background:var(--dark);color:#fff}
 
@@ -181,8 +185,8 @@
       .process-grid{grid-template-columns:1fr;margin-top:30px}
       .process-step,.process-step:nth-child(odd),.process-step:nth-child(even){display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:16px;min-height:0;padding:20px 0 22px;border-left:0;border-top:1px solid rgba(255,255,255,.14)}
       .process-step:first-child{border-top:0;padding-top:0}
-      .process-step h3{margin:0 0 7px;font-size:21px}
-      .process-step p{max-width:48ch}
+      .process-step h3{margin:0 0 7px;font-size:21px;grid-column:2}
+      .process-step p{max-width:48ch;grid-column:2}
 
       .cta{padding:68px 0 72px}
       .cta-grid{grid-template-columns:1fr;gap:20px}
@@ -206,40 +210,7 @@
       .service-actions{flex-direction:column;align-items:stretch}
       .service-action{width:100%}
     }
-  
-    .css-arrow{
-      display:inline-block;
-      position:relative;
-      width:14px;
-      height:14px;
-      flex:0 0 14px;
-      margin-left:7px;
-      vertical-align:-1px;
-      color:currentColor;
-    }
-    .css-arrow::before{
-      content:"";
-      position:absolute;
-      width:8px;
-      height:8px;
-      right:0;
-      top:0;
-      border-top:1.7px solid currentColor;
-      border-right:1.7px solid currentColor;
-    }
-    .css-arrow::after{
-      content:"";
-      position:absolute;
-      width:11px;
-      height:1.7px;
-      left:1px;
-      top:9px;
-      background:currentColor;
-      transform:rotate(-45deg);
-      transform-origin:left center;
-    }
-
-</style>
+  </style>
 
 <style id="linefive-canonical-header">
 /* Exact homepage header shared with all LineFive pages */
@@ -319,7 +290,7 @@
           <p class="eyebrow">SERVICES</p>
           <h1 id="services-title" class="display">One team for the spaces that matter.</h1>
           <p>From a new kitchen to a full renovation, Line Five brings the design and execution together.</p>
-          <a class="hero-link" href="quotation-generator.html">Start Your Project <span class="css-arrow" aria-hidden="true"></span></a>
+          <a class="hero-link" href="quotation-generator.html">Start Your Project <span class="lf-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 19L19 5M8 5H19V16"/></svg></span></a>
         </div>
         <div class="hero-image reveal">
           <img src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/692ec91755930273c371c487_Untitled%20design-29.png" alt="LineFive 3D design and space planning project">
@@ -350,8 +321,8 @@
                 <span>Full renovations</span><span>Partial renovations</span><span>Construction</span>
               </div>
               <div class="service-actions" aria-label="Renovations and construction actions">
-                <a class="service-action primary whatsapp" href="https://wa.me/233534346348?text=Hi%20Line%20Five%2C%20I%20want%20to%20renovate%20my%20home.%20I%20would%20like%20to%20discuss%20the%20project%2C%20arrange%20a%20site%20visit%20and%20understand%20the%20next%20steps." target="_blank" rel="noopener">Renovate my home</a>
-                <a class="service-action whatsapp" href="https://wa.me/233534346348?text=Hi%20Line%20Five%2C%20I%20want%20to%20build%20my%20home.%20I%20would%20like%20to%20discuss%20the%20project%2C%20arrange%20a%20site%20visit%20and%20understand%20the%20next%20steps." target="_blank" rel="noopener">Build my home</a>
+                <a class="service-action primary whatsapp" href="https://wa.me/233534346348?text=Hi%20Line%20Five%2C%20I%20want%20to%20renovate%20my%20home.%20I%20would%20like%20to%20discuss%20the%20project%2C%20arrange%20a%20site%20visit%20and%20understand%20the%20next%20steps." target="_blank" rel="noopener"><span class="lf-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 19L19 5M8 5H19V16"/></svg></span>Renovate my home</a>
+                <a class="service-action whatsapp" href="https://wa.me/233534346348?text=Hi%20Line%20Five%2C%20I%20want%20to%20build%20my%20home.%20I%20would%20like%20to%20discuss%20the%20project%2C%20arrange%20a%20site%20visit%20and%20understand%20the%20next%20steps." target="_blank" rel="noopener"><span class="lf-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 19L19 5M8 5H19V16"/></svg></span>Build my home</a>
               </div>
             </div>
           </article>
@@ -369,7 +340,7 @@
               </div>
               <div class="service-actions" aria-label="Interior fit out actions">
                 <a class="service-action primary" href="quotation-generator.html#services">Get an estimate</a>
-                <a class="service-action whatsapp" href="https://wa.me/233534346348?text=Hi%20Line%20Five%2C%20I%20am%20interested%20in%20an%20interior%20fit%20out%20project.%20I%20would%20like%20to%20discuss%20what%20I%20need%20and%20the%20next%20steps." target="_blank" rel="noopener">Speak to us</a>
+                <a class="service-action whatsapp" href="https://wa.me/233534346348?text=Hi%20Line%20Five%2C%20I%20am%20interested%20in%20an%20interior%20fit%20out%20project.%20I%20would%20like%20to%20discuss%20what%20I%20need%20and%20the%20next%20steps." target="_blank" rel="noopener"><span class="lf-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 19L19 5M8 5H19V16"/></svg></span>Speak to us</a>
               </div>
             </div>
           </article>
@@ -386,7 +357,7 @@
                 <span>Space planning</span><span>3D design</span><span>Materials</span>
               </div>
               <div class="service-actions" aria-label="3D design actions">
-                <a class="service-action primary whatsapp" href="https://wa.me/233534346348?text=Hi%20Line%20Five%2C%20I%20want%203D%20designs%20and%20space%20planning%20for%20my%20project.%20I%20would%20like%20to%20discuss%20the%20design%20process%20and%20the%20next%20steps." target="_blank" rel="noopener">I want 3D designs</a>
+                <a class="service-action primary whatsapp" href="https://wa.me/233534346348?text=Hi%20Line%20Five%2C%20I%20want%203D%20designs%20and%20space%20planning%20for%20my%20project.%20I%20would%20like%20to%20discuss%20the%20design%20process%20and%20the%20next%20steps." target="_blank" rel="noopener"><span class="lf-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 19L19 5M8 5H19V16"/></svg></span>I want 3D designs</a>
               </div>
             </div>
           </article>
@@ -433,7 +404,7 @@
         <h2 id="cta-heading" class="display reveal">Tell us what you are planning.</h2>
         <div class="reveal">
           <p class="cta-copy">You do not need everything figured out before you speak to us. Start with what you know and we will help you work out the next step.</p>
-          <a class="cta-btn" href="quotation-generator.html">Start Your Project <span class="css-arrow" aria-hidden="true"></span></a>
+          <a class="cta-btn" href="quotation-generator.html">Start Your Project <span class="lf-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 19L19 5M8 5H19V16"/></svg></span></a>
         </div>
       </div>
     </section>
