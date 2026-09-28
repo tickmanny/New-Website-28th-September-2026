@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Wardrobe Quote Calculator | LineFive</title>
+  <meta name="description" content="Build your LineFive wardrobe configuration and see a preliminary material estimate from your measurements.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --lf-ink:#242422;
+      --lf-muted:#6f6d67;
+      --lf-paper:#f5f4f0;
+      --lf-white:#fbfaf7;
+      --lf-warm:#eceae4;
+      --lf-line:#ddd9d1;
+      --lf-red:#d84b36;
+      --lf-dark:#30302d;
+      --lf-max:1240px;
+      --display:"Montserrat",Arial,sans-serif;
+      --body:"DM Sans",Arial,sans-serif;
+      --pill:999px;
+      --radius:18px;
+      --paper:#F1F3F0;
+      --surface:#FFFFFF;
+      --ink:#15232B;
+      --muted:#5B6B72;
+      --line:#D3DAD5;
+      --blue:#2A5D7A;
+      --grid:rgba(42,93,122,.10);
+    }
+
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:110px;background:var(--lf-paper)}
+    body{margin:0;background:var(--lf-paper);color:var(--lf-ink);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased}
+    img{display:block;max-width:100%}
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font:inherit;color:inherit}
+    :focus-visible{outline:2px solid var(--lf-red);outline-offset:4px}
+    ::selection{background:var(--lf-red);color:#fff}
+
+    .site-header{position:fixed;inset:0 0 auto;z-index:50;padding:18px 30px;pointer-events:none}
+    .nav-shell{width:min(var(--lf-max),100%);margin:0 auto;pointer-events:auto}
+    .nav{min-height:62px;padding:6px 7px 6px 34px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:rgba(249,248,244,.93);border:1px solid rgba(35,33,29,.07);border-radius:var(--pill);box-shadow:0 10px 30px rgba(35,33,29,.07);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .nav-links{display:flex;align-items:center;gap:26px}
+    .nav-links a{font-size:13px;font-weight:600;color:#3d3c38;transition:color .2s ease}
+    .nav-links a:hover,.nav-links a.active{color:var(--lf-red)}
+    .logo{display:flex;align-items:center;justify-content:center}
+    .logo img{height:46px;width:auto;max-width:160px;object-fit:contain}
+    .nav-actions{display:flex;justify-content:flex-end;align-items:center}
+    .nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:var(--pill);background:#33322f;color:#fff;font-size:13px;font-weight:700;transition:background .2s ease,transform .2s ease}
+    .nav-cta:hover{background:#242422;transform:translateY(-1px)}
+    .menu-toggle{display:none;border:0;background:transparent;padding:8px;cursor:pointer}
+    .menu-lines{display:block;position:relative;width:24px;height:16px}
+    .menu-lines span{position:absolute;left:0;width:100%;height:1.5px;background:#222;transition:transform .2s ease,top .2s ease}
+    .menu-lines span:first-child{top:3px}.menu-lines span:last-child{top:11px}
+    .menu-toggle.open .menu-lines span:first-child{top:7px;transform:rotate(45deg)}
+    .menu-toggle.open .menu-lines span:last-child{top:7px;transform:rotate(-45deg)}
+    .mobile-menu{display:none}
+    .mobile-menu.open{display:block}
+
+    .wrap{width:min(var(--lf-max),calc(100% - 48px));margin:0 auto;padding:150px 0 120px}
+    header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:48px;margin-bottom:42px;padding-bottom:38px;border-bottom:1px solid rgba(36,36,34,.11)}
+    header.top>div:first-child{max-width:760px}
+    .brand{margin:0 0 13px;color:var(--lf-red);font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+    header.top h1{margin:0;max-width:16ch;font-family:var(--display);font-size:clamp(50px,6vw,78px);line-height:1.01;font-weight:600;letter-spacing:-.06em;color:var(--lf-ink)}
+    header.top p{margin:0;max-width:410px;color:var(--lf-muted);font-size:16px;line-height:1.7}
+
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:30px;align-items:start}
+    section.step,.quote{background:var(--lf-white);border:1px solid #dfdbd3;border-radius:18px;box-shadow:0 8px 25px rgba(36,34,30,.035)}
+    section.step{padding:24px;margin-bottom:16px}
+    .step-head{display:flex;gap:12px;align-items:center;margin-bottom:15px}
+    .step-head .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--lf-dark);color:#fff;display:grid;place-items:center;font-family:var(--display);font-size:11px;font-weight:700}
+    .step-head h2,.quote h2{margin:0;font-family:var(--display);letter-spacing:-.035em;font-weight:600;color:var(--lf-ink)}
+    .step-head h2{font-size:24px}
+    .sub{margin:-3px 0 16px;color:var(--lf-muted);font-size:14px}
+
+    .shapes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .shape{position:relative}
+    .shape input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+    .shape .tile{display:flex;flex-direction:column;align-items:center;gap:8px;padding:15px 10px;border:1px solid #ddd8d0;border-radius:14px;background:#fff;transition:border-color .2s ease,background .2s ease,transform .2s ease}
+    .shape .tile:hover{transform:translateY(-1px);border-color:#c9c2b9}
+    .shape input:checked + .tile{border-color:var(--lf-red);background:#fff8f6}
+    .shape svg{width:100%;max-width:112px;height:auto}
+    .shape strong{font-size:14px;font-weight:700;color:var(--lf-ink)}
+    .shape small{color:var(--lf-muted);font-size:11px;text-align:center;line-height:1.3}
+
+    .drafting{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px;overflow:hidden}
+    .drafting-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:8px;align-items:end}
+    .drafting svg{width:100%;height:auto;display:block;max-height:330px}
+    .drafting .cap{font-size:.82rem;color:#687179;margin-top:6px}
+    .drafting .cab{fill:none;stroke:#5f5e59;stroke-width:1.8}
+    .drafting .wall{fill:none;stroke:#262624;stroke-width:3.5;stroke-linecap:square}
+    .drafting .dl{fill:none;stroke:#8a8881;stroke-width:1.3}
+    .drafting .dt{fill:#66645f;font-size:12px;font-family:var(--body);font-weight:600}
+    .drafting .soft{fill:#f9f8f5;stroke:#8a8881;stroke-width:1.2}
+    .drafting .topcab{fill:#ece8e0;stroke:#696761;stroke-width:1.3;stroke-dasharray:5 3}
+    .drafting .doorline{stroke:#85837d;stroke-width:1}
+    .drafting [data-dim].active .dl{stroke:var(--lf-red);stroke-width:1.8}
+    .drafting [data-dim].active .dt{fill:var(--lf-red)}
+    .drafting .labelbox{paint-order:stroke;stroke:#f8f7f3;stroke-width:6px;stroke-linejoin:round}
+    .diagram-note{margin:8px 0 0;color:var(--lf-muted);font-size:11px;line-height:1.45}
+
+    .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+    .field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#383733}
+    .field .hintline{font-size:12px;color:var(--lf-muted);margin-top:6px;line-height:1.35}
+    .inputwrap{position:relative}
+    .inputwrap input{width:100%;min-height:46px;padding:11px 42px 11px 13px;border:1px solid #d9d5cd;border-radius:10px;background:#fff;transition:border-color .2s ease,box-shadow .2s ease}
+    .inputwrap input:focus{border-color:var(--lf-red);box-shadow:0 0 0 3px rgba(216,75,54,.09);outline:none}
+    .inputwrap .unit{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--lf-muted);pointer-events:none}
+    .issues{margin-top:12px;color:#a23b30;font-size:13px}
+    .issues p+p{margin-top:2px}
+
+    .fixed-card{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:14px 15px;border:1px solid #dfdbd3;border-radius:12px;background:#f7f6f2}
+    .fixed-card b{display:block;font-size:14px;font-weight:700;color:#353531}
+    .fixed-card span{display:block;color:var(--lf-muted);font-size:12px;line-height:1.4;margin-top:3px}
+    .fixed-pill{flex:none;padding:7px 10px;border:1px solid #d5d1c8;border-radius:999px;background:#fff;color:#6e6a63;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+
+    .quote{padding:24px;position:sticky;top:104px}
+    .quote h2{font-size:25px;margin-bottom:8px}
+    .quote-kicker{margin:0;color:#96928a;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+    .rows{list-style:none;margin:14px 0 0;padding:0}
+    .rows li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #ebe7df}
+    .rows li:last-child{border-bottom:0}
+    .rows .l{min-width:0;font-size:12px;color:#41403b}
+    .rows .l small{display:block;color:#8a8680;font-size:10px;line-height:1.3;margin-top:2px}
+    .rows .a{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:12px;font-weight:700;color:#2d2d2a}
+    .total{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:16px 0 4px;padding:17px 18px;border-radius:14px;background:#f2eee7;border:1px solid #e6dfd4;position:relative}
+    .total::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--lf-red);border-radius:14px 0 0 14px}
+    .total span{font-family:var(--display);font-weight:600;letter-spacing:-.02em}
+    .total b{font-family:var(--display);font-size:28px;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+    .fine{font-size:12px;color:var(--lf-muted);line-height:1.5}
+    .quote .fine{margin-top:10px}
+    .actions{display:grid;gap:9px;margin-top:16px}
+    .btn{border:1px solid #2f2f2d;background:#fff;border-radius:999px;padding:9px 14px;cursor:pointer;font-weight:700;font-size:12px;min-height:40px;transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
+    .btn:hover{background:#2f2f2d;color:#fff;transform:translateY(-1px)}
+    .btn.primary{background:#292927;color:#fff;border-color:#292927;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    .btn.primary:hover{background:var(--lf-red);border-color:var(--lf-red)}
+    details.qt{margin-top:13px;font-size:12px}
+    details.qt summary{cursor:pointer;font-weight:700;color:#47453f}
+    details.qt textarea{width:100%;min-height:150px;margin-top:8px;padding:11px;border:1px solid #d9d5cd;border-radius:10px;background:#f7f6f2;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;resize:vertical}
+    .reset{margin-top:12px;width:100%;border:0;background:transparent;color:#777;font-size:11px;text-decoration:underline;cursor:pointer}
+    .totalbar{position:fixed;left:0;right:0;bottom:0;z-index:45;display:none;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:#292927;color:#fff;box-shadow:0 -10px 28px rgba(35,33,29,.16)}
+    .totalbar small{display:block;color:rgba(255,255,255,.55);font-size:10px;text-transform:uppercase;letter-spacing:.09em}
+    .totalbar b{font-family:var(--display);font-size:20px;font-weight:600}
+    .totalbar a{color:#fff;font-size:12px;font-weight:700}
+
+    footer{padding:66px 0 30px;background:#2d2c29;color:#fff}
+    .footer-wrap{width:min(var(--lf-max),calc(100% - 48px));margin:0 auto}
+    .footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:50px;padding-bottom:45px;border-bottom:1px solid rgba(255,255,255,.12)}
+    .footer-brand img{height:40px;width:auto;filter:brightness(0) invert(1);opacity:.96}
+    .footer-links{display:flex;flex-wrap:wrap;gap:24px 30px}
+    .footer-links a{font-size:13px;color:rgba(255,255,255,.78);transition:color .2s ease}
+    .footer-links a:hover{color:#fff}
+    .footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:30px;padding-top:24px}
+    .footer-bottom span,.footer-bottom a{font-size:11px;color:rgba(255,255,255,.45)}
+
+    @media(max-width:1050px){
+      .nav-links{gap:20px}
+      .layout{grid-template-columns:minmax(0,1fr)}
+      .quote{position:static}
+      .totalbar{display:flex}
+      .wrap{padding-bottom:150px}
+    }
+    @media(max-width:760px){
+      .site-header{padding:12px 16px}
+      .nav{min-height:58px;padding:6px 8px 6px 16px;grid-template-columns:1fr auto}
+      .nav-links,.nav-actions{display:none}
+      .logo{justify-self:start}
+      .logo img{height:40px}
+      .menu-toggle{display:block;justify-self:end}
+      .mobile-menu{padding:10px 16px 16px;background:rgba(249,248,244,.97);border:1px solid rgba(35,33,29,.07);border-radius:22px;box-shadow:0 12px 28px rgba(35,33,29,.08);margin-top:8px}
+      .mobile-menu a{display:block;padding:13px 2px;border-bottom:1px solid rgba(35,33,29,.09);font-size:13px;font-weight:600;color:#3d3c38}
+      .mobile-menu a:last-child{border-bottom:0}
+      .wrap{width:min(var(--lf-max),calc(100% - 28px));padding:115px 0 130px}
+      header.top{display:block;margin-bottom:28px;padding-bottom:26px}
+      header.top h1{font-size:clamp(42px,14vw,64px);max-width:15ch}
+      header.top p{margin-top:18px;font-size:14px;max-width:520px}
+      section.step{padding:18px;border-radius:15px}
+      .step-head h2{font-size:21px}
+      .shapes{gap:8px}
+      .shape .tile{padding:12px 6px}
+      .drafting{padding:10px}
+      .drafting-grid{grid-template-columns:1fr}
+      .drafting svg{max-height:320px}
+      .fields{grid-template-columns:1fr}
+      .option-grid{grid-template-columns:1fr}
+      .quote{padding:18px;border-radius:15px}
+      .quote h2{font-size:22px}
+      .total b{font-size:24px}
+      .footer-top,.footer-bottom{display:block}
+      .footer-links{margin-top:28px;gap:15px 20px}
+      .footer-bottom a,.footer-bottom span{display:block;margin-top:10px}
+    }
+
+    .inputwrap input[type=number]{appearance:textfield;-moz-appearance:textfield}
+    .inputwrap input[type=number]::-webkit-outer-spin-button,.inputwrap input[type=number]::-webkit-inner-spin-button{margin:0;-webkit-appearance:none}
+    .option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .option-card{border:1px solid #ddd8d0;border-radius:14px;background:#fff;overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease}
+    .option-card.on{border-color:var(--lf-red);box-shadow:0 8px 24px rgba(216,75,54,.08)}
+    .option-body{padding:14px}
+    .option-card h3{margin:0;font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:-.025em}
+    .option-card p{margin:6px 0 0;color:var(--lf-muted);font-size:12px;line-height:1.45}
+    .option-meta{margin-top:10px;font-size:11px;color:#8a8680}
+    .option-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+    .stepper{display:flex;align-items:center;gap:7px}
+    .stepper button{width:34px;height:34px;border-radius:50%;border:1px solid #2f2f2d;background:#fff;font-size:17px;cursor:pointer;line-height:1}
+    .stepper button:hover:not(:disabled){background:#2f2f2d;color:#fff}
+    .stepper button:disabled{cursor:not-allowed;opacity:.45}
+    .stepper output{min-width:28px;text-align:center;font-weight:700;font-size:12px}
+    .door-options{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .door-card{position:relative;border:1px solid #ddd8d0;border-radius:14px;background:#fff;overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+    .door-card:hover{transform:translateY(-1px);border-color:#c9c2b9}
+    .door-card.selected{border-color:var(--lf-red);box-shadow:0 8px 24px rgba(216,75,54,.08);background:#fff8f6}
+    .door-card button{width:100%;border:0;background:transparent;text-align:left;padding:0;cursor:pointer;color:inherit}
+    .door-visual{aspect-ratio:1.4/1;background:#f3f1eb;border-bottom:1px solid #e6e1d9;display:grid;place-items:center;padding:16px}
+    .door-visual svg{width:100%;height:100%;max-height:160px}
+    .door-card-body{padding:14px}
+    .door-card h3{margin:0;font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:-.025em}
+    .door-card p{margin:6px 0 0;color:var(--lf-muted);font-size:12px;line-height:1.45}
+    .door-badge{display:inline-flex;margin-top:10px;padding:5px 8px;border-radius:999px;background:#f3f0ea;color:#5b5852;font-size:10px;font-weight:700}
+    .door-card.selected .door-badge{background:#ffe9e4;color:#a63222}
+    .led-toggle{margin-bottom:12px}
+    .led-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px;border:1px solid #ddd8d0;border-radius:14px;background:#fff}
+    .led-copy strong{display:block;font-size:14px;font-weight:700}
+    .led-copy span{display:block;margin-top:4px;color:var(--lf-muted);font-size:12px;line-height:1.4}
+    .led-meta{margin-top:5px;color:#8a8680!important;font-size:11px!important}
+    .toggle{position:relative;flex:none;width:50px;height:28px}
+    .toggle input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+    .toggle i{position:absolute;inset:0;border-radius:99px;background:#d3d0c9;transition:background .2s ease}
+    .toggle i::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);transition:transform .2s ease}
+    .toggle input:checked+i{background:var(--lf-red)}
+    .toggle input:checked+i::after{transform:translateX(22px)}
+    .boarddoor{fill:#d7d2c8;stroke:#7c776d;stroke-width:1.2}
+    .glass-fill{fill:rgba(216,75,54,.10);stroke:#b6b0a6;stroke-width:1.2}
+    .glass-fill-soft{fill:rgba(216,75,54,.055);stroke:#b6b0a6;stroke-width:1.2}
+    .led-line{stroke:#d84b36;stroke-width:2.2;stroke-linecap:round;opacity:.95}
+    .box-boundary{stroke:#77736b;stroke-width:1.6;stroke-dasharray:3 3}
+    @media(max-width:760px){.door-options{grid-template-columns:1fr}}
+  </style>
+
+<style id="linefive-canonical-header">
+/* Header */
+    .site-header{position:fixed;inset:0 0 auto;z-index:100;padding:18px 30px;pointer-events:none}
+    .site-header .nav-shell{width:min(var(--lf-max),100%);margin:0 auto;pointer-events:auto}
+    .site-header .nav{min-height:62px;padding:6px 7px 6px 34px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:rgba(249,248,244,.92);border:1px solid rgba(35,33,29,.07);border-radius:var(--pill);box-shadow:0 10px 30px rgba(35,33,29,.075);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .site-header .nav-links{display:flex;align-items:center;gap:28px}
+    .site-header .site-header .nav-links a{font-size:13px;font-weight:600;color:#383734;transition:color .2s ease}
+    .site-header .site-header .nav-links a:hover{color:var(--lf-red)}
+    .site-header .logo{display:flex;justify-content:center;align-items:center}
+    .site-header .logo img{height:46px;width:auto;max-width:160px;object-fit:contain}
+    .site-header .nav-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px}
+    .site-header .nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:var(--pill);background:#33322e;color:#fff;font-size:13px;font-weight:700;transition:transform .2s ease,background .2s ease}
+     .site-header .site-header .nav-cta:hover{background:var(--lf-red);transform:translateY(-1px)}
+    .site-header .menu-toggle{display:none;width:44px;height:44px;border:0;background:transparent;border-radius:50%;padding:10px}
+    .site-header .menu-lines{position:relative;display:block;width:24px;height:16px}
+    .site-header .menu-lines span{position:absolute;left:0;width:100%;height:1.5px;background:#111;transition:transform .2s ease,top .2s ease}
+    .site-header .site-header .menu-lines span:first-child{top:3px}.site-header .site-header .menu-lines span:last-child{top:11px}
+    .site-header .menu-toggle.open .site-header .site-header .menu-lines span:first-child{top:7px;transform:rotate(45deg)}
+    .site-header .menu-toggle.open .site-header .site-header .menu-lines span:last-child{top:7px;transform:rotate(-45deg)}
+    .site-header .mobile-menu{display:none}
+@media (max-width:1020px){
+  .site-header{padding:14px 20px}
+  .site-header .nav{padding-left:20px}
+  .site-header .nav-links{gap:20px}
+}
+@media (max-width:760px){
+  .site-header{padding:10px 15px}
+  .site-header .nav{grid-template-columns:auto 1fr auto;min-height:56px;padding:5px 7px 5px 16px}
+  .site-header .nav-links{display:none}
+  .site-header .logo{justify-content:flex-start;padding-left:16px}
+  .site-header .logo img{height:40px;max-width:140px}
+  .site-header .nav-cta{display:none}
+  .site-header .menu-toggle{display:block}
+  .site-header .mobile-menu{position:absolute;left:0;right:0;top:66px;padding:15px;background:rgba(249,248,244,.98);border:1px solid rgba(35,33,29,.07);border-radius:20px;box-shadow:0 20px 50px rgba(35,33,29,.12)}
+  .site-header .mobile-menu.open{display:block}
+  .site-header .mobile-menu a{display:block;padding:13px 10px;font-size:15px;font-weight:700;border-bottom:1px solid #ececea}
+  .site-header .mobile-menu a:last-child{border-bottom:0}
+}
+</style>
+</head>
+<body>
+  <header class="site-header">
+<div class="nav-shell">
+<div class="nav">
+<nav aria-label="Primary navigation" class="nav-links">
+<a href="services.html">Services</a>
+<a href="https://www.instagram.com/linefiveinteriors?stkn=bTZ6ODJyb3dweXA5&amp;utm_source=qr" rel="noopener" target="_blank">Our Work</a>
+<a href="index.html#process">Process</a>
+<a href="quotation-generator.html">Instant Estimate</a>
+</nav>
+<a aria-label="LineFive home" class="logo" href="index.html">
+<img alt="LineFive" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/692ec2fd8240b162787c2939_Untitled%20design-28.png"/>
+</a>
+<div class="nav-actions">
+<a class="nav-cta" href="quotation-generator.html">Start Your Project</a>
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Open menu" class="menu-toggle" type="button">
+<span class="menu-lines"><span></span><span></span></span>
+</button>
+</div>
+</div>
+<nav aria-label="Mobile navigation" class="mobile-menu" id="mobileMenu">
+<a href="services.html">Services</a>
+<a href="https://www.instagram.com/linefiveinteriors?stkn=bTZ6ODJyb3dweXA5&amp;utm_source=qr" rel="noopener" target="_blank">Our Work</a>
+<a href="index.html#process">Process</a>
+<a href="quotation-generator.html">Instant Estimate</a>
+<a href="faq.html">FAQs</a>
+<a href="quotation-generator.html">Start Your Project</a>
+</nav>
+</div>
+</header>
+
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <div class="brand">Wardrobe Quote Calculator</div>
+        <h1>Get your wardrobe estimate in a minute</h1>
+      </div>
+      <p>Choose the layout, enter the measurements and build a complete preliminary wardrobe estimate as you go.</p>
+    </header>
+
+    <div class="layout">
+      <main>
+        <section class="step" aria-labelledby="h-shape">
+          <div class="step-head"><span class="n">1</span><h2 id="h-shape">Wardrobe shape</h2></div>
+          <div class="shapes" id="shapes" role="radiogroup" aria-label="Wardrobe shape"></div>
+        </section>
+
+        <section class="step" aria-labelledby="h-size">
+          <div class="step-head"><span class="n">2</span><h2 id="h-size">Measurements</h2></div>
+          <p class="sub">Measure in metres. The drawing updates so you can see what each number means.</p>
+          <div class="drafting" id="drafting" data-active="">
+            <div class="drafting-grid">
+              <div><div id="plan"></div><p class="cap">Plan view, looking down</p></div>
+              <div><div id="elev"></div><p class="cap">Elevation view</p></div>
+            </div>
+            <p class="diagram-note">Set the lower cabinet height with HL. The remaining height becomes the top cabinet. L and U shaped wardrobes use the return dimension Z, with each return wardrobe run calculated as Z minus 0.60 m.</p>
+          </div>
+          <div class="fields">
+            <div class="field">
+              <label for="w">Main width (W)</label>
+              <div class="inputwrap"><input id="w" type="number" inputmode="decimal" step="0.05" min="0" value="3"><span class="unit">m</span></div>
+              <p class="hintline">Width of the main straight wardrobe run</p>
+            </div>
+            <div class="field" id="fieldZ" hidden>
+              <label for="z">Return dimension (Z)</label>
+              <div class="inputwrap"><input id="z" type="number" inputmode="decimal" step="0.05" min="1" value="2.4"><span class="unit">m</span></div>
+              <p class="hintline">Required for L and U shapes. Minimum 1.00 m</p>
+            </div>
+            <div class="field">
+              <label for="h">Overall height (H)</label>
+              <div class="inputwrap"><input id="h" type="number" inputmode="decimal" step="0.05" min="0" value="2.4"><span class="unit">m</span></div>
+              <p class="hintline">Floor to the top of the wardrobe</p>
+            </div>
+          </div>
+          <div class="issues" id="issues" aria-live="polite"></div>
+        </section>
+
+        <section class="step" aria-labelledby="h-height">
+          <div class="step-head"><span class="n">3</span><h2 id="h-height">Wardrobe height structure</h2></div>
+          <p class="sub">Set the lower cabinet height. It defaults to 2.10 m and cannot exceed 2.30 m. The remaining height becomes the top cabinet.</p>
+          <div class="fields">
+            <div class="field">
+              <label for="hl">Lower cabinet height (HL)</label>
+              <div class="inputwrap"><input id="hl" type="number" inputmode="decimal" step="0.05" min="2.10" max="2.30" value="2.10"><span class="unit">m</span></div>
+              <p class="hintline">Default 2.10 m. Maximum 2.30 m.</p>
+            </div>
+            <div class="field">
+              <label>Top cabinet height (HT)</label>
+              <div class="fixed-card" style="min-height:46px;padding:9px 11px;margin:0">
+                <div><b id="htDisplay">0.30 m</b><span>Calculated as H minus HL</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="step" aria-labelledby="h-doors">
+          <div class="step-head"><span class="n">4</span><h2 id="h-doors">Lower door type</h2></div>
+          <p class="sub">Choose the finish for the lower cabinet doors. The upper cabinet always remains standard board doors.</p>
+          <div class="option-grid door-options" id="doorOptions"></div>
+        </section>
+
+        <section class="step" aria-labelledby="h-options">
+          <div class="step-head"><span class="n">5</span><h2 id="h-options">Wardrobe options</h2></div>
+          <p class="sub">Add optional accessories or internal LED side-panel lighting to your estimate.</p>
+          <div class="led-toggle" id="ledOption"></div>
+          <div class="option-grid" id="accessoryOptions"></div>
+        </section>
+
+        <section class="step" aria-labelledby="h-estimate-note">
+          <div class="step-head"><span class="n">6</span><h2 id="h-estimate-note">Estimate</h2></div>
+          <p class="sub">All standard LineFive pricing is already included. Your estimate updates live as you change the measurements and options.</p>
+          <div class="pricing-status ready" id="customerPricingNote">Complete wardrobe estimate calculated from the current LineFive material and costing configuration.</div>
+        </section>
+      </main>
+
+      <aside class="quote" id="quote" aria-labelledby="h-quote">
+        <p class="quote-kicker">YOUR CONFIGURATION</p>
+        <h2 id="h-quote">Your wardrobe estimate</h2>
+        <div id="rows"></div>
+        <div class="total"><span>Estimated customer price</span><b id="total">GH₵ 0.00</b></div>
+        <p class="fine" id="estimateNote">Your measurements and selected options are reflected live. LineFive internal unit rates are not shown.</p>
+        <div class="actions">
+          <a class="btn primary" id="wa" href="#" target="_blank" rel="noopener">Send on WhatsApp</a>
+          <button class="btn" id="copy" type="button">Copy quote summary</button>
+        </div>
+        <details class="qt"><summary>Show quote text</summary><textarea id="qtext" readonly></textarea></details>
+        <button class="reset" id="reset" type="button">Reset selections</button>
+      </aside>
+    </div>
+  </div>
+
+  <div class="totalbar"><div><small>Estimate</small><br><b id="barTotal">GH₵ 0</b></div><a href="#quote">See estimate</a></div>
+
+  <footer>
+    <div class="footer-wrap">
+      <div class="footer-top">
+        <a class="footer-brand" href="index.html" aria-label="LineFive home">
+          <img src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/692ec2fd8240b162787c2939_Untitled%20design-28.png" alt="LineFive">
+        </a>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="index.html">Home</a>
+          <a href="services.html">Services</a>
+          <a href="https://www.instagram.com/linefiveinteriors?stkn=bTZ6ODJyb3dweXA5&utm_source=qr" target="_blank" rel="noopener">Our Work</a>
+          <a href="quotation-generator.html">Tools</a>
+          <a href="faq.html">FAQs</a>
+          <a href="mailto:info.linefive@gmail.com">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>LineFive Interiors</span>
+        <a href="tel:0534346348">0534346348</a>
+        <a href="mailto:info.linefive@gmail.com">info.linefive@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* =========================================================
+       LINEFIVE WARDROBE CALCULATOR
+       Public UI only.
+       Pricing and costing run on the private Cloudflare Worker.
+       ========================================================= */
+
+    const WARDROBE_API = 'https://wardrobe-calculator.info-linefive.workers.dev/';
+
+    const UI = {
+      currency: 'GH₵',
+      wardrobeDepth: 0.60,
+      standardLowerHeight: 2.10,
+      maxLowerHeight: 2.30,
+      doorModule: 0.50
+    };
+
+    const DOOR_TYPES = [
+      {id:'board', name:'Standard Board', text:'100% board door', badge:'No glass'},
+      {id:'halfGlass', name:'Half Glass', text:'50% board · 50% glass', badge:'50% glass'},
+      {id:'fullGlass', name:'Full Glass', text:'100% glass door', badge:'100% glass'}
+    ];
+
+    const ACCESSORIES = [
+      {id:'trouserRack', name:'Trouser rack', description:'Pull-out trouser storage'},
+      {id:'tieTrouserOrganiser', name:'Tie / trouser organiser', description:'Internal tie and trouser organiser'},
+      {id:'shoeRack', name:'Wooden shoe rack', description:'Wooden internal shoe storage'}
+    ];
+
+    const STATE = {
+      shape: 'straight',
+      w: 3,
+      z: 2.4,
+      h: 2.4,
+      hl: 2.1,
+      doorType: 'board',
+      ledEnabled: false,
+      accessories: {}
+    };
+
+    const $ = id => document.getElementById(id);
+
+    const money = n =>
+      UI.currency + ' ' +
+      Number(n || 0).toLocaleString('en-US', {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+      });
+
+    const m = n =>
+      Number(n || 0).toFixed(2) + ' m';
+
+    const n2 = value => {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : NaN;
+    };
+
+    const SHAPES = [
+      {id:'straight', name:'Straight', text:'One wall'},
+      {id:'L', name:'L shape', text:'Two walls'},
+      {id:'U', name:'U shape', text:'Three walls'}
+    ];
+
+    let lastQuote = null;
+    let summaryText = '';
+    let requestSeq = 0;
+
+    function shapeIcon(kind){
+      const wall = 'stroke="var(--ink)" stroke-width="4" stroke-linecap="square"';
+      const cab = 'fill="none" stroke="var(--lf-ink)" stroke-width="2"';
+      let g = `<path d="M6 8H90" ${wall}/><rect x="8" y="10" width="80" height="14" ${cab}/>`;
+      if(kind !== 'straight'){
+        g += `<path d="M6 8V60" ${wall}/><rect x="8" y="24" width="14" height="34" ${cab}/>`;
+      }
+      if(kind === 'U'){
+        g += `<path d="M90 8V60" ${wall}/><rect x="74" y="24" width="14" height="34" ${cab}/>`;
+      }
+      return `<svg viewBox="0 0 96 66" aria-hidden="true">${g}</svg>`;
+    }
+
+    function doorVisual(type){
+      if(type === 'board'){
+        return `<svg viewBox="0 0 150 105" aria-hidden="true">
+          <rect x="35" y="10" width="80" height="85" rx="2" fill="#d7d2c8" stroke="#7c776d" stroke-width="2"/>
+          <line x1="75" y1="10" x2="75" y2="95" stroke="#a59e94" stroke-width="1"/>
+        </svg>`;
+      }
+
+      if(type === 'halfGlass'){
+        return `<svg viewBox="0 0 150 105" aria-hidden="true">
+          <rect x="24" y="18" width="102" height="69" rx="2" fill="#d7d2c8" stroke="#7c776d" stroke-width="2"/>
+          <rect x="26" y="20" width="23.5" height="65" rx="1" class="glass-fill-soft"/>
+          <rect x="100.5" y="20" width="23.5" height="65" rx="1" class="glass-fill-soft"/>
+          <line x1="49.5" y1="18" x2="49.5" y2="87" stroke="#a59e94" stroke-width="1"/>
+          <line x1="75" y1="18" x2="75" y2="87" stroke="#a59e94" stroke-width="1"/>
+          <line x1="100.5" y1="18" x2="100.5" y2="87" stroke="#a59e94" stroke-width="1"/>
+        </svg>`;
+      }
+
+      return `<svg viewBox="0 0 150 105" aria-hidden="true">
+        <rect x="35" y="10" width="80" height="85" rx="2" class="glass-fill"/>
+        <line x1="75" y1="10" x2="75" y2="95" stroke="#b6b0a6" stroke-width="1"/>
+      </svg>`;
+    }
+
+    $('shapes').innerHTML = SHAPES.map(s => `
+      <label class="shape">
+        <input type="radio" name="shape" value="${s.id}" ${s.id===STATE.shape?'checked':''}>
+        <span class="tile">${shapeIcon(s.id)}<strong>${s.name}</strong><small>${s.text}</small></span>
+      </label>`).join('');
+
+    $('doorOptions').innerHTML = DOOR_TYPES.map(d => `
+      <article class="door-card ${d.id===STATE.doorType?'selected':''}">
+        <button type="button" data-door-type="${d.id}" aria-pressed="${d.id===STATE.doorType}">
+          <div class="door-visual">${doorVisual(d.id)}</div>
+          <div class="door-card-body">
+            <h3>${d.name}</h3>
+            <p>${d.text}. Only the lower cabinet changes. The upper cabinet always remains standard board.</p>
+            <span class="door-badge">${d.badge}</span>
+          </div>
+        </button>
+      </article>`).join('');
+
+    const $doorButtons =
+      document.querySelectorAll('button[data-door-type]');
+
+    $doorButtons.forEach(btn => btn.addEventListener('click', () => {
+      STATE.doorType = btn.dataset.doorType;
+
+      if(STATE.doorType === 'board'){
+        STATE.ledEnabled = false;
+      }
+
+      update();
+    }));
+
+    function renderDoorOptions(){
+      document.querySelectorAll('.door-card').forEach(card => {
+        const button =
+          card.querySelector(
+            'button[data-door-type]'
+          );
+
+        const selected =
+          button &&
+          button.dataset.doorType ===
+            STATE.doorType;
+
+        card.classList.toggle(
+          'selected',
+          selected
+        );
+
+        if(button){
+          button.setAttribute(
+            'aria-pressed',
+            String(selected)
+          );
+        }
+      });
+    }
+
+    function renderLEDOption(){
+      const glassEnabled =
+        STATE.doorType !== 'board';
+
+      if(!glassEnabled){
+        STATE.ledEnabled = false;
+      }
+
+      const enabled =
+        STATE.ledEnabled;
+
+      const glassDoorCount =
+        Number(
+          lastQuote?.glassDoorCount || 0
+        );
+
+      const ledLength =
+        Number(
+          lastQuote?.quantities?.totalLEDLength || 0
+        );
+
+      $('ledOption').innerHTML = `
+        <div class="led-row ${glassEnabled ? '' : 'disabled'}">
+          <div class="led-copy">
+            <strong>Internal LED lighting</strong>
+            <span>${glassEnabled
+              ? 'Two vertical LED runs per lower glass door. Lighting is optional and does not change the wardrobe material quantities.'
+              : 'Available only when Half Glass or Full Glass is selected for the lower doors.'}</span>
+            ${enabled
+              ? `<span class="led-meta">${glassDoorCount} lower glass door${glassDoorCount===1?'':'s'} · ${ledLength.toFixed(2)} m of LED</span>`
+              : `<span class="led-meta">${glassEnabled ? 'Not selected' : 'Unavailable with Standard doors'}</span>`}
+          </div>
+          <label class="toggle" aria-label="Internal LED lighting">
+            <input id="ledSwitch" type="checkbox" ${enabled?'checked':''} ${glassEnabled?'':'disabled'}>
+            <i></i>
+          </label>
+        </div>`;
+
+      $('ledSwitch').addEventListener(
+        'change',
+        e => {
+          STATE.ledEnabled =
+            e.target.checked &&
+            glassEnabled;
+          update();
+        }
+      );
+    }
+
+    function renderAccessoryOptions(){
+      $('accessoryOptions').innerHTML =
+        ACCESSORIES.map(item => {
+          const qty =
+            Math.max(
+              0,
+              Math.floor(
+                Number(
+                  STATE.accessories[item.id] || 0
+                )
+              )
+            );
+
+          return `
+            <div class="option-card ${qty>0?'on':''}">
+              <div class="option-body">
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+                <div class="option-meta">Optional</div>
+                <div class="option-controls">
+                  <div class="stepper">
+                    <button type="button"
+                      aria-label="Remove one ${item.name}"
+                      data-accessory="${item.id}"
+                      data-delta="-1"
+                      ${qty<=0?'disabled':''}>−</button>
+                    <output aria-label="${item.name} quantity">${qty}</output>
+                    <button type="button"
+                      aria-label="Add one ${item.name}"
+                      data-accessory="${item.id}"
+                      data-delta="1">+</button>
+                  </div>
+                  <span class="fine">${qty>0 ? `${qty} selected` : 'Not selected'}</span>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+
+      $('accessoryOptions')
+        .querySelectorAll(
+          'button[data-accessory]'
+        )
+        .forEach(btn => {
+          btn.addEventListener(
+            'click',
+            () => {
+              const key =
+                btn.dataset.accessory;
+
+              const delta =
+                Number(
+                  btn.dataset.delta || 0
+                );
+
+              STATE.accessories[key] =
+                Math.max(
+                  0,
+                  Math.floor(
+                    Number(
+                      STATE.accessories[key] || 0
+                    ) + delta
+                  )
+                );
+
+              update();
+            }
+          );
+        });
+    }
+
+    function doorPatternSvg(type, x, y, w, h){
+      if(type === 'board'){
+        return `<rect x="${x}" y="${y}" width="${w}" height="${h}" class="boarddoor"/>`;
+      }
+
+      if(type === 'halfGlass'){
+        return `<rect x="${x}" y="${y}" width="${w}" height="${h}" class="boarddoor"/>`;
+      }
+
+      return `<rect x="${x+1.5}" y="${y+1.5}" width="${Math.max(0,w-3)}" height="${Math.max(0,h-3)}" class="glass-fill"/>`;
+    }
+
+    function halfGlassZonesSvg(x, y, w, h){
+      const inset = 2;
+      const zoneW =
+        Math.max(
+          0,
+          w * 0.25 -
+          inset
+        );
+
+      return [
+        `<rect x="${x+inset}" y="${y+inset}" width="${zoneW}" height="${Math.max(0,h-inset*2)}" rx="1" class="glass-fill-soft"/>`,
+        `<rect x="${x+w*0.75}" y="${y+inset}" width="${zoneW}" height="${Math.max(0,h-inset*2)}" rx="1" class="glass-fill-soft"/>`
+      ].join('');
+    }
+
+    function planSVG(){
+      const W =
+        Math.max(
+          0.2,
+          Number(STATE.w) ||
+          0.2
+        );
+
+      const Z =
+        Math.max(
+          1,
+          Number(STATE.z) ||
+          1
+        );
+
+      const returnWidth =
+        Math.max(
+          0.4,
+          Z -
+          UI.wardrobeDepth
+        );
+
+      const Wv =
+        Math.min(
+          7,
+          Math.max(
+            1.5,
+            W
+          )
+        );
+
+      const Rv =
+        Math.min(
+          4.4,
+          Math.max(
+            0.4,
+            returnWidth
+          )
+        );
+
+      const mainLen =
+        185 +
+        (
+          (Wv - 1.5) /
+          5.5
+        ) *
+        155;
+
+      const returnRunVisual =
+        48 +
+        (
+          (Rv - 0.4) /
+          4
+        ) *
+        84;
+
+      const cabDepth = 40;
+      const mainY = 105;
+      const wallY = 92;
+      const leftX = 42;
+      const rightX = leftX + mainLen;
+      const returnStartY =
+        mainY + cabDepth;
+
+      const returnY =
+        returnStartY +
+        returnRunVisual;
+
+      const arrowId =
+        'wardArrow';
+
+      const active =
+        id =>
+          document.activeElement &&
+          document.activeElement.id ===
+            id
+            ? 'active'
+            : '';
+
+      const parts = [];
+
+      parts.push(
+        `<defs><marker id="${arrowId}" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#8a8881"></path></marker></defs>`
+      );
+
+      parts.push(
+        `<path class="wall" d="M${leftX} ${wallY}H${rightX}"/>`
+      );
+
+      parts.push(
+        `<rect class="cab" x="${leftX}" y="${mainY}" width="${mainLen}" height="${cabDepth}"/>`
+      );
+
+      const mainDoorCount =
+        Math.max(
+          1,
+          Math.ceil(
+            W /
+            UI.doorModule
+          )
+        );
+
+      for(
+        let i = 0;
+        i < mainDoorCount;
+        i++
+      ){
+        const x1 =
+          leftX +
+          mainLen *
+          (i / mainDoorCount);
+
+        const x2 =
+          leftX +
+          mainLen *
+          ((i + 1) /
+            mainDoorCount);
+
+        parts.push(
+          doorPatternSvg(
+            'board',
+            x1 + 1,
+            mainY + 1,
+            Math.max(
+              1,
+              x2 - x1 - 2
+            ),
+            cabDepth - 2
+          )
+        );
+
+        if(i > 0){
+          parts.push(
+            `<line class="doorline" x1="${x1}" y1="${mainY}" x2="${x1}" y2="${mainY+cabDepth}"/>`
+          );
+        }
+      }
+
+      if(
+        STATE.shape === 'L' ||
+        STATE.shape === 'U'
+      ){
+        parts.push(
+          `<path class="wall" d="M${rightX} ${wallY}V${returnY+18}"/>`
+        );
+
+        parts.push(
+          `<rect class="cab" x="${rightX-cabDepth}" y="${returnStartY}" width="${cabDepth}" height="${returnRunVisual}"/>`
+        );
+
+        const retDoors =
+          Math.max(
+            1,
+            Math.ceil(
+              returnWidth /
+              UI.doorModule
+            )
+          );
+
+        for(
+          let i = 0;
+          i < retDoors;
+          i++
+        ){
+          const y1 =
+            returnStartY +
+            returnRunVisual *
+            (i / retDoors);
+
+          const y2 =
+            returnStartY +
+            returnRunVisual *
+            ((i + 1) /
+              retDoors);
+
+          parts.push(
+            doorPatternSvg(
+              'board',
+              rightX -
+                cabDepth +
+                1,
+              y1 + 1,
+              cabDepth - 2,
+              Math.max(
+                1,
+                y2 - y1 - 2
+              )
+            )
+          );
+
+          if(i > 0){
+            parts.push(
+              `<line class="doorline" x1="${rightX-cabDepth}" y1="${y1}" x2="${rightX}" y2="${y1}"/>`
+            );
+          }
+        }
+
+        parts.push(
+          `<g data-dim="z" class="${active('z')}"><path class="dl" d="M${rightX+34} ${mainY}V${returnY}M${rightX+28} ${mainY}h12M${rightX+28} ${returnY}h12" marker-start="url(#wardArrow)" marker-end="url(#wardArrow)"/><text class="dt labelbox" transform="translate(${rightX+50} ${(mainY+returnY)/2}) rotate(90)" text-anchor="middle">Z ${m(Z)}</text></g>`
+        );
+
+        parts.push(
+          `<text class="dt labelbox" x="${rightX-cabDepth/2}" y="${returnStartY+returnRunVisual/2+4}" text-anchor="middle" transform="rotate(-90 ${rightX-cabDepth/2} ${returnStartY+returnRunVisual/2+4})">Run ${m(returnWidth)}</text>`
+        );
+      }
+
+      if(STATE.shape === 'U'){
+        parts.push(
+          `<path class="wall" d="M${leftX} ${wallY}V${returnY+18}"/>`
+        );
+
+        parts.push(
+          `<rect class="cab" x="${leftX}" y="${returnStartY}" width="${cabDepth}" height="${returnRunVisual}"/>`
+        );
+
+        const retDoors =
+          Math.max(
+            1,
+            Math.ceil(
+              returnWidth /
+              UI.doorModule
+            )
+          );
+
+        for(
+          let i = 0;
+          i < retDoors;
+          i++
+        ){
+          const y1 =
+            returnStartY +
+            returnRunVisual *
+            (i / retDoors);
+
+          const y2 =
+            returnStartY +
+            returnRunVisual *
+            ((i + 1) /
+              retDoors);
+
+          parts.push(
+            doorPatternSvg(
+              'board',
+              leftX + 1,
+              y1 + 1,
+              cabDepth - 2,
+              Math.max(
+                1,
+                y2 - y1 - 2
+              )
+            )
+          );
+
+          if(i > 0){
+            parts.push(
+              `<line class="doorline" x1="${leftX}" y1="${y1}" x2="${leftX+cabDepth}" y2="${y1}"/>`
+            );
+          }
+        }
+
+        parts.push(
+          `<text class="dt labelbox" x="${leftX+cabDepth/2}" y="${returnStartY+returnRunVisual/2+4}" text-anchor="middle" transform="rotate(-90 ${leftX+cabDepth/2} ${returnStartY+returnRunVisual/2+4})">Run ${m(returnWidth)}</text>`
+        );
+      }
+
+      const dimY =
+        STATE.shape === 'U'
+          ? returnY + 26
+          : mainY +
+            cabDepth +
+            52;
+
+      parts.push(
+        `<g data-dim="w" class="${active('w')}"><path class="dl" d="M${leftX} ${dimY}H${rightX}M${leftX} ${dimY-6}v12M${rightX} ${dimY-6}v12" marker-start="url(#wardArrow)" marker-end="url(#wardArrow)"/><text class="dt labelbox" x="${(leftX+rightX)/2}" y="${dimY+22}" text-anchor="middle">W ${m(W)}</text></g>`
+      );
+
+      if(
+        STATE.shape !== 'straight'
+      ){
+        parts.push(
+          `<text class="dt labelbox" x="${leftX+mainLen/2}" y="${wallY+8}" text-anchor="middle">Main run W</text>`
+        );
+      }
+
+      if(
+        STATE.shape === 'straight'
+      ){
+        const label =
+          STATE.doorType === 'fullGlass'
+            ? 'Full glass wardrobe run'
+            : STATE.doorType === 'halfGlass'
+              ? 'Half glass wardrobe run'
+              : 'Wardrobe run';
+
+        parts.push(
+          `<text class="dt labelbox" x="${leftX+mainLen/2}" y="${mainY+cabDepth/2+5}" text-anchor="middle">${label}</text>`
+        );
+      }
+
+      return `
+        <svg viewBox="0 0 420 285" role="img" aria-label="Wardrobe plan diagram">
+          ${parts.join('')}
+        </svg>`;
+    }
+
+    function elevSVG(){
+      const H =
+        Math.max(
+          UI.standardLowerHeight + 0.01,
+          Number(STATE.h) ||
+            UI.standardLowerHeight + 0.01
+        );
+
+      const HL =
+        Math.min(
+          UI.maxLowerHeight,
+          Math.max(
+            UI.standardLowerHeight,
+            Number(STATE.hl) ||
+              UI.standardLowerHeight
+          )
+        );
+
+      const HT =
+        Math.max(
+          0.01,
+          H - HL
+        );
+
+      const floor = 236;
+      const scale =
+        Math.min(
+          190 / H,
+          82
+        );
+
+      const topY =
+        floor -
+        H * scale;
+
+      const lowerY =
+        floor -
+        HL * scale;
+
+      const X = 52;
+      const width = 110;
+      const lowerH =
+        floor - lowerY;
+
+      const topH =
+        Math.max(
+          14,
+          lowerY - topY
+        );
+
+      const active =
+        id =>
+          document.activeElement &&
+          document.activeElement.id ===
+            id
+            ? 'active'
+            : '';
+
+      const pieces = [];
+
+      pieces.push(
+        `<defs><marker id="elevArrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#8a8881"></path></marker></defs>`
+      );
+
+      pieces.push(
+        `<path class="wall" d="M${X} ${topY-6}V${floor}"/>`
+      );
+
+      pieces.push(
+        `<line x1="${X-8}" y1="${floor}" x2="${X+width+50}" y2="${floor}" stroke="#262624" stroke-width="2"/>`
+      );
+
+      const doorCount =
+        Math.max(
+          1,
+          Math.ceil(
+            (Number(STATE.w) || 1) /
+            UI.doorModule
+          )
+        );
+
+      for(
+        let i = 0;
+        i < doorCount;
+        i++
+      ){
+        const dx =
+          X +
+          width *
+          (i / doorCount);
+
+        const dw =
+          width / doorCount;
+
+        pieces.push(
+          doorPatternSvg(
+            STATE.doorType === 'fullGlass'
+              ? 'fullGlass'
+              : 'board',
+            dx + 1,
+            lowerY + 1,
+            Math.max(
+              1,
+              dw - 2
+            ),
+            Math.max(
+              1,
+              lowerH - 2
+            )
+          )
+        );
+
+        if(
+          STATE.doorType === 'halfGlass'
+        ){
+          pieces.push(
+            halfGlassZonesSvg(
+              X + 1,
+              lowerY + 1,
+              Math.max(
+                1,
+                width - 2
+              ),
+              Math.max(
+                1,
+                lowerH - 2
+              )
+            )
+          );
+        }
+
+        if(
+          STATE.ledEnabled &&
+          STATE.doorType !== 'board'
+        ){
+          pieces.push(
+            `<line class="led-line" x1="${dx+4}" y1="${lowerY+5}" x2="${dx+4}" y2="${floor-5}"/>`
+          );
+
+          pieces.push(
+            `<line class="led-line" x1="${dx+dw-4}" y1="${lowerY+5}" x2="${dx+dw-4}" y2="${floor-5}"/>`
+          );
+        }
+
+        if(i > 0){
+          pieces.push(
+            `<line class="doorline" x1="${dx}" y1="${lowerY}" x2="${dx}" y2="${floor}"/>`
+          );
+        }
+      }
+
+      pieces.push(
+        `<rect class="topcab" x="${X}" y="${topY}" width="${width}" height="${topH}"/>`
+      );
+
+      const topDoorCount = doorCount;
+
+      for(
+        let i = 0;
+        i < topDoorCount;
+        i++
+      ){
+        const dx =
+          X +
+          width *
+          (i / topDoorCount);
+
+        const dw =
+          width /
+          topDoorCount;
+
+        pieces.push(
+          doorPatternSvg(
+            'board',
+            dx + 1,
+            topY + 1,
+            Math.max(
+              1,
+              dw - 2
+            ),
+            Math.max(
+              1,
+              topH - 2
+            )
+          )
+        );
+
+        if(i > 0){
+          pieces.push(
+            `<line class="doorline" x1="${dx}" y1="${topY}" x2="${dx}" y2="${lowerY}"/>`
+          );
+        }
+      }
+
+      const boxCount =
+        Math.ceil(
+          doorCount / 2
+        );
+
+      for(
+        let i = 1;
+        i < boxCount;
+        i++
+      ){
+        const dx =
+          X +
+          width *
+          (
+            Math.min(
+              doorCount,
+              i * 2
+            ) /
+            doorCount
+          );
+
+        pieces.push(
+          `<line class="box-boundary" x1="${dx}" y1="${topY}" x2="${dx}" y2="${floor}"/>`
+        );
+      }
+
+      pieces.push(
+        `<text class="dt labelbox" x="${X+width/2}" y="${lowerY+lowerH/2+4}" text-anchor="middle">Lower ${m(HL)}</text>`
+      );
+
+      pieces.push(
+        `<text class="dt labelbox" x="${X+width/2}" y="${topY+topH/2+4}" text-anchor="middle">Top ${m(HT)}</text>`
+      );
+
+      const hx = X + width + 44;
+      const topDimY = topY;
+
+      pieces.push(
+        `<g data-dim="h" class="${active('h')}"><path class="dl" d="M${hx} ${topY}V${floor}M${hx-6} ${topDimY}h12M${hx-6} ${floor}h12" marker-start="url(#elevArrow)" marker-end="url(#elevArrow)"/><text class="dt labelbox" transform="translate(${hx+17} ${(topY+floor)/2}) rotate(90)" text-anchor="middle">H ${m(H)}</text></g>`
+      );
+
+      const lx = X - 34;
+
+      pieces.push(
+        `<g data-dim="hl" class="${active('hl')}"><path class="dl" d="M${lx} ${lowerY}V${floor}M${lx-6} ${lowerY}h12M${lx-6} ${floor}h12" marker-start="url(#elevArrow)" marker-end="url(#elevArrow)"/><text class="dt labelbox" transform="translate(${lx-16} ${(lowerY+floor)/2}) rotate(-90)" text-anchor="middle">HL ${m(HL)}</text></g>`
+      );
+
+      return `
+        <svg viewBox="0 0 220 285" role="img" aria-label="Wardrobe elevation diagram">
+          ${pieces.join('')}
+        </svg>`;
+    }
+
+    function updateDiagram(){
+      $('fieldZ').hidden =
+        STATE.shape === 'straight';
+
+      $('plan').innerHTML =
+        planSVG();
+
+      $('elev').innerHTML =
+        elevSVG();
+
+      const H = n2(STATE.h);
+      const HL = n2(STATE.hl);
+
+      $('htDisplay').textContent =
+        Number.isFinite(H) &&
+        Number.isFinite(HL) &&
+        H > HL
+          ? m(H - HL)
+          : 'Check H and HL';
+    }
+
+    function showInvalid(errors){
+      const issues =
+        Array.isArray(errors)
+          ? errors
+          : ['Unable to calculate the estimate.'];
+
+      $('issues').innerHTML =
+        issues
+          .map(p => `<p>${p}</p>`)
+          .join('');
+
+      $('rows').innerHTML = `
+        <ul class="rows">
+          <li>
+            <span class="l">
+              Complete your measurements
+              <small>
+                The estimate will appear when the configuration is valid.
+              </small>
+            </span>
+            <span class="a">Check size</span>
+          </li>
+        </ul>`;
+
+      $('total').textContent =
+        'Check size';
+
+      $('total').classList.add(
+        'disabled-total'
+      );
+
+      $('barTotal').textContent =
+        'Check size';
+
+      $('wa').href = '#';
+      $('qtext').value = '';
+      summaryText = '';
+      lastQuote = null;
+
+      renderLEDOption();
+    }
+
+    async function renderEstimate(){
+      const seq =
+        ++requestSeq;
+
+      $('issues').innerHTML = '';
+
+      $('rows').innerHTML = `
+        <ul class="rows">
+          <li>
+            <span class="l">
+              Calculating estimate
+              <small>
+                Checking the current configuration.
+              </small>
+            </span>
+            <span class="a">...</span>
+          </li>
+        </ul>`;
+
+      $('total').textContent =
+        'Calculating...';
+
+      $('barTotal').textContent =
+        'Calculating...';
+
+      const payload = {
+        calculator: 'wardrobe',
+        shape: STATE.shape,
+        w: STATE.w,
+        z: STATE.z,
+        h: STATE.h,
+        hl: STATE.hl,
+        doorType: STATE.doorType,
+        ledEnabled: STATE.ledEnabled,
+        accessories: {
+          trouserRack:
+            Number(
+              STATE.accessories.trouserRack || 0
+            ),
+          tieTrouserOrganiser:
+            Number(
+              STATE.accessories.tieTrouserOrganiser || 0
+            ),
+          shoeRack:
+            Number(
+              STATE.accessories.shoeRack || 0
+            )
+        }
+      };
+
+      if(
+        !WARDROBE_API ||
+        WARDROBE_API.includes(
+          'PASTE_YOUR_WARDROBE_WORKER_URL_HERE'
+        )
+      ){
+        showInvalid([
+          'Wardrobe calculation service is not connected yet.'
+        ]);
+        return;
+      }
+
+      try{
+        const response =
+          await fetch(
+            WARDROBE_API,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
+              body:
+                JSON.stringify(payload)
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if(seq !== requestSeq){
+          return;
+        }
+
+        if(
+          !response.ok ||
+          !data.ok
+        ){
+          showInvalid([
+            data?.error ||
+            'Unable to calculate the estimate.'
+          ]);
+          return;
+        }
+
+        if(!data.valid){
+          showInvalid(
+            data.errors ||
+            ['Please correct the configuration.']
+          );
+          return;
+        }
+
+        const q =
+          data.quote;
+
+        lastQuote =
+          q;
+
+        $('issues').innerHTML = '';
+
+        const c =
+          q.costs;
+
+        const quantities =
+          q.quantities;
+
+        const accessorySummary =
+          c.accessorySelected &&
+          c.accessorySelected.length
+            ? c.accessorySelected
+                .map(
+                  a =>
+                    `${a.name}: ${a.quantity}`
+                )
+                .join(', ')
+            : 'None';
+
+        const materialsRows = `
+          <p class="quote-section-label">Materials</p>
+          <ul class="rows">
+            <li>
+              <span class="l">
+                Board & back panel
+                <small>
+                  ${q.physicalBoards} main boards · ${q.physicalBackPanelBoards} back panels
+                </small>
+              </span>
+              <span class="a">
+                ${money(
+                  c.mainBoardCost +
+                  c.backPanelCost
+                )}
+              </span>
+            </li>
+
+            ${
+              q.glassDoorArea > 0
+                ? `
+                  <li>
+                    <span class="l">
+                      Glass doors
+                      <small>
+                        ${q.glassDoorArea.toFixed(2)} m²
+                      </small>
+                    </span>
+                    <span class="a">
+                      ${money(
+                        c.glassDoorCost
+                      )}
+                    </span>
+                  </li>`
+                : ''
+            }
+
+            <li>
+              <span class="l">
+                Cutting
+                <small>
+                  ${quantities.cuttingBoards} physical boards
+                </small>
+              </span>
+              <span class="a">
+                ${money(
+                  c.cuttingCost
+                )}
+              </span>
+            </li>
+
+            <li>
+              <span class="l">
+                Edge band
+                <small>
+                  ${quantities.totalEdgeBandLength.toFixed(2)} m total
+                </small>
+              </span>
+              <span class="a">
+                ${money(
+                  c.edgeBandCost
+                )}
+              </span>
+            </li>
+          </ul>`;
+
+        const hardwareRows = `
+          <p class="quote-section-label">Hardware & Accessories</p>
+          <ul class="rows">
+            <li>
+              <span class="l">
+                Hardware
+                <small>
+                  ${quantities.handles} handles · ${quantities.hinges} hinges · ${quantities.shelfSupports} shelf supports
+                </small>
+              </span>
+              <span class="a">
+                ${money(
+                  c.totalHardwareCost
+                )}
+              </span>
+            </li>
+
+            <li>
+              <span class="l">
+                Accessories
+                <small>
+                  ${accessorySummary}
+                </small>
+              </span>
+              <span class="a">
+                ${money(
+                  c.accessoryCost
+                )}
+              </span>
+            </li>
+
+            ${
+              c.ledStripCost > 0
+                ? `
+                  <li>
+                    <span class="l">
+                      Internal LED lighting
+                      <small>
+                        ${quantities.totalLEDLength.toFixed(2)} m
+                      </small>
+                    </span>
+                    <span class="a">
+                      ${money(
+                        c.ledStripCost
+                      )}
+                    </span>
+                  </li>`
+                : ''
+            }
+
+            <li>
+              <span class="l">
+                Consumables
+                <small>
+                  Project allowance
+                </small>
+              </span>
+              <span class="a">
+                ${money(
+                  c.consumablesCost
+                )}
+              </span>
+            </li>
+          </ul>`;
+
+        const installRows = `
+          <p class="quote-section-label">Installation & Delivery</p>
+          <ul class="rows">
+            <li>
+              <span class="l">
+                Installation
+                <small>
+                  ${quantities.runLength.toFixed(2)} m wardrobe run length
+                </small>
+              </span>
+              <span class="a">
+                ${money(
+                  c.labourCost
+                )}
+              </span>
+            </li>
+
+            <li>
+              <span class="l">
+                Transport
+                <small>
+                  Fixed project cost
+                </small>
+              </span>
+              <span class="a">
+                ${money(
+                  c.transportCost
+                )}
+              </span>
+            </li>
+          </ul>`;
+
+        $('rows').innerHTML =
+          materialsRows +
+          hardwareRows +
+          installRows;
+
+        $('total').textContent =
+          money(
+            c.sellingPrice
+          );
+
+        $('total').classList.remove(
+          'disabled-total'
+        );
+
+        $('barTotal').textContent =
+          money(
+            c.sellingPrice
+          );
+
+        $('estimateNote').textContent =
+          'Complete preliminary estimate including materials, cutting, edge band, hardware, accessories, optional lower-door LED lighting, consumables, labour and transport.';
+
+        const shapeName =
+          SHAPES.find(
+            s =>
+              s.id ===
+              q.shape
+          )?.name ||
+          q.shape;
+
+        const doorName =
+          DOOR_TYPES.find(
+            d =>
+              d.id ===
+              STATE.doorType
+          )?.name ||
+          STATE.doorType;
+
+        summaryText = [
+          'Hello LineFive, I have created a wardrobe estimate.',
+          '',
+          'WARDROBE DETAILS',
+          `Shape: ${shapeName}`,
+          `Lower door type: ${doorName}`,
+          `LED lighting: ${STATE.ledEnabled ? `Yes (${quantities.totalLEDLength.toFixed(2)} m)` : 'No'}`,
+          `Main width W: ${q.W.toFixed(2)} m`,
+          (
+            q.shape === 'straight'
+              ? null
+              : `Return dimension Z: ${q.Z.toFixed(2)} m`
+          ),
+          (
+            q.shape === 'straight'
+              ? null
+              : `Return wardrobe run: ${q.returnWidth.toFixed(2)} m`
+          ),
+          `Overall height H: ${q.H.toFixed(2)} m`,
+          `Lower cabinet height HL: ${q.HL.toFixed(2)} m`,
+          `Top cabinet height HT: ${q.HT.toFixed(2)} m`,
+          `Doors: ${q.totalDoors}`,
+          `Lower boxes: ${q.totalLowerBoxCount}`,
+          `Upper boxes: ${q.totalUpperBoxCount}`,
+          `Shelves: ${q.totalShelfCount}`,
+          `Main boards: ${q.physicalBoards}`,
+          `Back panel boards: ${q.physicalBackPanelBoards}`,
+          `Glass door area: ${q.glassDoorArea.toFixed(2)} m²`,
+          `Selected accessories: ${accessorySummary}`,
+          '',
+          `MATERIALS: ${money(c.mainBoardCost + c.backPanelCost)}`,
+          `GLASS DOORS: ${money(c.glassDoorCost)}`,
+          `CUTTING: ${money(c.cuttingCost)}`,
+          `EDGE BAND: ${money(c.edgeBandCost)}`,
+          `HARDWARE: ${money(c.totalHardwareCost)}`,
+          `ACCESSORIES: ${money(c.accessoryCost)}`,
+          `LED LIGHTING: ${money(c.ledStripCost)}`,
+          `CONSUMABLES: ${money(c.consumablesCost)}`,
+          `INSTALLATION: ${money(c.labourCost)}`,
+          `TRANSPORT: ${money(c.transportCost)}`,
+          `ESTIMATED TOTAL: ${money(c.sellingPrice)}`,
+          '',
+          'This is a preliminary estimate and will be confirmed after site measurement and final design.'
+        ]
+          .filter(Boolean)
+          .join('\n');
+
+        $('qtext').value =
+          summaryText;
+
+        $('wa').href =
+          'https://wa.me/?text=' +
+          encodeURIComponent(
+            summaryText
+          );
+
+        renderLEDOption();
+
+      }catch(error){
+        if(seq !== requestSeq){
+          return;
+        }
+
+        showInvalid([
+          'Unable to reach the wardrobe calculation service.'
+        ]);
+      }
+    }
+
+    function update(){
+      renderDoorOptions();
+      renderLEDOption();
+      renderAccessoryOptions();
+      updateDiagram();
+      renderEstimate();
+    }
+
+    function bindInput(id,key){
+      const input = $(id);
+
+      input.addEventListener(
+        'input',
+        () => {
+          STATE[key] =
+            n2(input.value);
+          update();
+        }
+      );
+
+      input.addEventListener(
+        'change',
+        () => {
+          STATE[key] =
+            n2(input.value);
+          update();
+        }
+      );
+
+      input.addEventListener(
+        'focus',
+        updateDiagram
+      );
+
+      input.addEventListener(
+        'blur',
+        updateDiagram
+      );
+    }
+
+    document
+      .querySelectorAll(
+        'input[name="shape"]'
+      )
+      .forEach(input => {
+        input.addEventListener(
+          'change',
+          () => {
+            STATE.shape =
+              input.value;
+            update();
+          }
+        );
+      });
+
+    bindInput('w','w');
+    bindInput('z','z');
+    bindInput('h','h');
+    bindInput('hl','hl');
+
+    $('copy').addEventListener(
+      'click',
+      async () => {
+        if(!summaryText) return;
+
+        try{
+          await navigator.clipboard.writeText(
+            summaryText
+          );
+        }catch(e){
+          const ta =
+            document.createElement(
+              'textarea'
+            );
+
+          ta.value =
+            summaryText;
+
+          document.body.appendChild(
+            ta
+          );
+
+          ta.select();
+
+          document.execCommand(
+            'copy'
+          );
+
+          ta.remove();
+        }
+
+        $('copy').textContent =
+          'Copied';
+
+        setTimeout(
+          () =>
+            $('copy').textContent =
+              'Copy quote summary',
+          1400
+        );
+      }
+    );
+
+    $('reset').addEventListener(
+      'click',
+      () => {
+        STATE.shape = 'straight';
+        STATE.w = 3;
+        STATE.z = 2.4;
+        STATE.h = 2.4;
+        STATE.hl = 2.1;
+        STATE.doorType = 'board';
+        STATE.ledEnabled = false;
+        STATE.accessories = {};
+
+        $('w').value = '3';
+        $('z').value = '2.4';
+        $('h').value = '2.4';
+        $('hl').value = '2.1';
+
+        document
+          .querySelectorAll(
+            'input[name="shape"]'
+          )
+          .forEach(
+            i =>
+              i.checked =
+                i.value ===
+                'straight'
+          );
+
+        update();
+
+        window.scrollTo({
+          top:
+            document.getElementById(
+              'quote'
+            ).offsetTop -
+            120,
+          behavior:
+            'smooth'
+        });
+      }
+    );
+
+    update();
+  </script>
+<script>
+(function(){
+  function closeNav(){
+    const toggle=document.querySelector('.menu-toggle');
+    const menu=document.getElementById('mobileMenu');
+    if(toggle && menu){
+      menu.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded','false');
+      toggle.setAttribute('aria-label','Open menu');
+      document.body.classList.remove('nav-open');
+    }
+  }
+  function init(){
+    const toggle=document.querySelector('.menu-toggle');
+    const menu=document.getElementById('mobileMenu');
+    if(!toggle || !menu) return;
+    if(toggle.dataset.lineFiveReady==='1') return;
+    toggle.dataset.lineFiveReady='1';
+    toggle.addEventListener('click',function(){
+      const open=menu.classList.toggle('open');
+      toggle.classList.toggle('open',open);
+      toggle.setAttribute('aria-expanded',String(open));
+      toggle.setAttribute('aria-label',open?'Close menu':'Open menu');
+      document.body.classList.toggle('nav-open',open);
+    });
+    menu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click',closeNav);
+    });
+    document.addEventListener('keydown',function(event){
+      if(event.key==='Escape' && menu.classList.contains('open')){
+        closeNav();
+        toggle.focus();
+      }
+    });
+    window.addEventListener('resize',function(){
+      if(window.innerWidth>760) closeNav();
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+</body>
+</html>

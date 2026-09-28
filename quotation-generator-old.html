@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Quotation Generator | LineFive</title>
+<meta content="Choose the LineFive service you would like a quotation for." name="description"/>
+<link href="styles.css" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--lf-off);color:var(--lf-black);font-family:"DM Sans",Arial,sans-serif}
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+    img{max-width:100%}
+
+    /* =========================
+       HERO
+       ========================= */
+    .qg-hero{position:relative;min-height:74vh;display:flex;align-items:flex-end;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,.23) 0%,rgba(0,0,0,.38) 45%,rgba(0,0,0,.70) 100%),url("https://cdn.prod.website-files.com/692eb386bc80524e102256c4/692edf54e73677a2e31ae926_Untitled%20design-38.png") center/cover no-repeat}
+    .qg-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.24),transparent 60%);pointer-events:none}
+    .qg-hero-content{position:relative;z-index:2;width:100%;max-width:1240px;margin:0 auto;padding:0 30px 88px}
+    .qg-kicker{margin:0 0 17px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#fff}
+    .qg-title{margin:0;max-width:820px;font-family:Montserrat,Arial,sans-serif;font-size:clamp(46px,6vw,82px);line-height:.99;font-weight:600;letter-spacing:-.05em;color:#fff}
+    .qg-intro{display:flex;justify-content:space-between;gap:50px;align-items:flex-end;margin-top:26px;max-width:1000px}
+    .qg-copy{margin:0;max-width:610px;color:rgba(255,255,255,.87);font-size:18px;line-height:1.7}
+    .qg-hero-note{margin:0;max-width:250px;color:rgba(255,255,255,.58);font-size:12px;line-height:1.55;text-transform:uppercase;letter-spacing:.08em}
+
+    /* =========================
+       SERVICE PICKER
+       ========================= */
+    .qg-picker{padding:105px 30px 95px;background:var(--lf-off)}
+    .qg-container{width:100%;max-width:1240px;margin:0 auto}
+    .qg-picker-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+    .qg-picker-kicker{margin:0 0 12px;color:var(--lf-red);font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase}
+    .qg-picker-title{margin:0;max-width:700px;font-family:Montserrat,Arial,sans-serif;font-size:clamp(36px,4.3vw,58px);font-weight:600;line-height:1.04;letter-spacing:-.045em}
+    .qg-picker-copy{margin:0;max-width:370px;color:var(--lf-grey);font-size:14px;line-height:1.7}
+
+    .qg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:48px}
+    .qg-card{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--lf-line);overflow:hidden;transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease}
+    .qg-card:hover{transform:translateY(-4px);border-color:#171717;box-shadow:0 20px 44px rgba(0,0,0,.08)}
+    .qg-image{position:relative;aspect-ratio:1.12/1;overflow:hidden;background:#ececea}
+    .qg-image img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .55s ease}
+    .qg-card:hover .qg-image img{transform:scale(1.045)}
+    .qg-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.18) 100%);pointer-events:none}
+    .qg-number{position:absolute;top:14px;left:14px;z-index:2;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#fff;color:#111;font-size:11px;font-weight:600;letter-spacing:.02em}
+    .qg-label{position:absolute;right:14px;bottom:14px;z-index:2;padding:7px 10px;background:rgba(255,255,255,.93);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+    .qg-card-body{display:flex;flex-direction:column;flex:1;padding:20px 19px 18px}
+    .qg-card-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+    .qg-card-title{margin:0;font-family:Montserrat,Arial,sans-serif;font-size:22px;line-height:1.1;font-weight:600;letter-spacing:-.025em}
+    .qg-arrow{font-size:21px;line-height:1;transition:transform .22s ease}
+    .qg-card:hover .qg-arrow{transform:translate(3px,-3px)}
+    .qg-card-copy{margin:9px 0 0;color:var(--lf-grey);font-size:13px;line-height:1.55}
+    .qg-status{display:flex;align-items:center;gap:7px;margin-top:auto;padding-top:16px;color:#666;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+    .qg-status-dot{width:5px;height:5px;border-radius:50%;background:#999}
+    .qg-status.live{color:#111}
+    .qg-status.live .qg-status-dot{background:var(--lf-red)}
+
+    .qg-note{margin:25px 0 0;padding-top:19px;border-top:1px solid #dededc;color:#777;font-size:12px;line-height:1.6}
+
+    /* =========================
+       PROCESS STRIP
+       ========================= */
+    .qg-process{padding:82px 30px;background:#111;color:#fff}
+    .qg-process-grid{display:grid;grid-template-columns:1.25fr repeat(3,1fr);gap:34px}
+    .qg-process-kicker{margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.14em;color:rgba(255,255,255,.50);text-transform:uppercase}
+    .qg-process-title{margin:0;max-width:390px;font-family:Montserrat,Arial,sans-serif;font-size:clamp(32px,3.6vw,48px);line-height:1.04;letter-spacing:-.04em;font-weight:600}
+    .qg-step-num{display:block;margin-bottom:38px;font-size:12px;letter-spacing:.08em;color:rgba(255,255,255,.42)}
+    .qg-step-title{margin:0 0 10px;font-family:Montserrat,Arial,sans-serif;font-size:18px;font-weight:600}
+    .qg-step-copy{margin:0;max-width:220px;color:rgba(255,255,255,.60);font-size:13px;line-height:1.65}
+
+    /* =========================
+       CTA
+       ========================= */
+    .qg-cta{padding:90px 30px;background:#e80000;color:#fff}
+    .qg-cta-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:end}
+    .qg-cta-title{margin:0;max-width:740px;font-family:Montserrat,Arial,sans-serif;font-size:clamp(38px,4.8vw,62px);font-weight:600;line-height:1.01;letter-spacing:-.045em}
+    .qg-cta-copy{margin:0 0 24px;max-width:490px;color:rgba(255,255,255,.88);font-size:15px;line-height:1.7}
+    .qg-cta-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border:1px solid #fff;background:transparent;color:#fff;font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;transition:background .2s ease,color .2s ease}
+    .qg-cta-btn:hover{background:#fff;color:#111}
+
+    /* =========================
+       FOOTER
+       ========================= */
+    .qg-footer{padding:74px 30px 38px;background:#111;color:#fff}
+    .qg-footer-top{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;padding-bottom:70px}
+    .qg-footer-title{margin:0 0 25px;max-width:470px;font-family:Montserrat,Arial,sans-serif;font-size:42px;line-height:1.04;letter-spacing:-.035em;font-weight:600}
+    .qg-footer-btn{display:inline-flex;align-items:center;min-height:43px;padding:0 15px;border:1px solid rgba(255,255,255,.55);color:#fff;font-size:12px;font-weight:600}
+    .qg-footer-btn:hover{background:#fff;color:#111}
+    .qg-footer-links{display:grid;grid-template-columns:1fr 1fr;gap:35px}
+    .qg-footer-heading{margin:0 0 16px;color:rgba(255,255,255,.42);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+    .qg-footer-links a{display:block;margin:0 0 10px;font-size:14px;color:#fff;opacity:.88}
+    .qg-footer-links a:hover{opacity:1;color:#fff}
+    .qg-footer-bottom{display:flex;justify-content:space-between;gap:40px;padding-top:28px;border-top:1px solid rgba(255,255,255,.12)}
+    .qg-footer-brand{max-width:320px}
+    .qg-footer-brand img{width:140px;height:auto;display:block;margin-bottom:14px}
+    .qg-footer-brand p,.qg-footer-contact p{margin:0;color:rgba(255,255,255,.53);font-size:12px;line-height:1.6}
+    .qg-footer-contact{text-align:right}
+    .qg-footer-contact a{display:block;color:#fff;font-size:13px;line-height:1.8}
+
+    /* =========================
+       MOBILE
+       ========================= */
+    @media(max-width:991px){
+      .qg-hero{min-height:68vh}
+      .qg-hero-content{padding:0 20px 70px}
+      .qg-intro{max-width:760px}
+      .qg-hero-note{display:none}
+      .qg-picker,.qg-process,.qg-cta,.qg-footer{padding-left:20px;padding-right:20px}
+      .qg-picker-head{display:block}
+      .qg-picker-copy{margin-top:18px;max-width:650px}
+      .qg-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .qg-process-grid{grid-template-columns:1fr 1fr}
+      .qg-process-intro{grid-column:1/-1}
+      .qg-cta-grid,.qg-footer-top{grid-template-columns:1fr;gap:30px}
+      .qg-footer-contact{text-align:left}
+    }
+    @media(max-width:640px){
+      .qg-hero{min-height:74vh}
+      .qg-hero-content{padding:0 16px 56px}
+      .qg-title{font-size:44px}
+      .qg-copy{font-size:16px}
+      .qg-picker{padding:68px 16px 64px}
+      .qg-grid{grid-template-columns:1fr;gap:14px;margin-top:30px}
+      .qg-image{aspect-ratio:1.22/1}
+      .qg-card-title{font-size:21px}
+      .qg-process{padding:68px 16px}
+      .qg-process-grid{grid-template-columns:1fr;gap:29px}
+      .qg-process-intro{grid-column:auto}
+      .qg-step-num{margin-bottom:14px}
+      .qg-cta{padding:68px 16px}
+      .qg-footer{padding:62px 16px 30px}
+      .qg-footer-title{font-size:34px}
+      .qg-footer-links{grid-template-columns:1fr 1fr;gap:20px}
+      .qg-footer-bottom{display:block}
+      .qg-footer-contact{margin-top:28px}
+    }
+    .qg-mobile-nav a{display:block;padding:14px 14px;font-size:14px;border-bottom:1px solid #eee}
+    .qg-mobile-nav a:last-child{border-bottom:0}
+  </style>
+
+<style id="linefive-canonical-header">
+/* Header */
+    .site-header{position:fixed;inset:0 0 auto;z-index:100;padding:18px 30px;pointer-events:none}
+    .site-header .nav-shell{width:min(var(--lf-max),100%);margin:0 auto;pointer-events:auto}
+    .site-header .nav{min-height:62px;padding:6px 7px 6px 34px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:rgba(249,248,244,.92);border:1px solid rgba(35,33,29,.07);border-radius:var(--pill);box-shadow:0 10px 30px rgba(35,33,29,.075);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .site-header .nav-links{display:flex;align-items:center;gap:28px}
+    .site-header .site-header .nav-links a{font-size:13px;font-weight:600;color:#383734;transition:color .2s ease}
+    .site-header .site-header .nav-links a:hover{color:var(--lf-red)}
+    .site-header .logo{display:flex;justify-content:center;align-items:center}
+    .site-header .logo img{height:46px;width:auto;max-width:160px;object-fit:contain}
+    .site-header .nav-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px}
+    .site-header .nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:var(--pill);background:#33322e;color:#fff;font-size:13px;font-weight:700;transition:transform .2s ease,background .2s ease}
+     .site-header .site-header .nav-cta:hover{background:var(--lf-red);transform:translateY(-1px)}
+    .site-header .menu-toggle{display:none;width:44px;height:44px;border:0;background:transparent;border-radius:50%;padding:10px}
+    .site-header .menu-lines{position:relative;display:block;width:24px;height:16px}
+    .site-header .menu-lines span{position:absolute;left:0;width:100%;height:1.5px;background:#111;transition:transform .2s ease,top .2s ease}
+    .site-header .site-header .menu-lines span:first-child{top:3px}.site-header .site-header .menu-lines span:last-child{top:11px}
+    .site-header .menu-toggle.open .site-header .site-header .menu-lines span:first-child{top:7px;transform:rotate(45deg)}
+    .site-header .menu-toggle.open .site-header .site-header .menu-lines span:last-child{top:7px;transform:rotate(-45deg)}
+    .site-header .mobile-menu{display:none}
+@media (max-width:1020px){
+  .site-header{padding:14px 20px}
+  .site-header .nav{padding-left:20px}
+  .site-header .nav-links{gap:20px}
+}
+@media (max-width:760px){
+  .site-header{padding:10px 15px}
+  .site-header .nav{grid-template-columns:auto 1fr auto;min-height:56px;padding:5px 7px 5px 16px}
+  .site-header .nav-links{display:none}
+  .site-header .logo{justify-content:flex-start;padding-left:16px}
+  .site-header .logo img{height:40px;max-width:140px}
+  .site-header .nav-cta{display:none}
+  .site-header .menu-toggle{display:block}
+  .site-header .mobile-menu{position:absolute;left:0;right:0;top:66px;padding:15px;background:rgba(249,248,244,.98);border:1px solid rgba(35,33,29,.07);border-radius:20px;box-shadow:0 20px 50px rgba(35,33,29,.12)}
+  .site-header .mobile-menu.open{display:block}
+  .site-header .mobile-menu a{display:block;padding:13px 10px;font-size:15px;font-weight:700;border-bottom:1px solid #ececea}
+  .site-header .mobile-menu a:last-child{border-bottom:0}
+}
+</style>
+</head>
+<body>
+<main>
+<section class="qg-hero">
+<div class="lf-header-wrap">
+<header class="site-header">
+<div class="nav-shell">
+<div class="nav">
+<nav aria-label="Primary navigation" class="nav-links">
+<a href="services.html">Services</a>
+<a href="https://www.instagram.com/linefiveinteriors?stkn=bTZ6ODJyb3dweXA5&amp;utm_source=qr" rel="noopener" target="_blank">Our Work</a>
+<a href="index.html#process">Process</a>
+<a href="quotation-generator.html">Instant Estimate</a>
+</nav>
+<a aria-label="LineFive home" class="logo" href="index.html">
+<img alt="LineFive" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/692ec2fd8240b162787c2939_Untitled%20design-28.png"/>
+</a>
+<div class="nav-actions">
+<a class="nav-cta" href="quotation-generator.html">Start Your Project</a>
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Open menu" class="menu-toggle" type="button">
+<span class="menu-lines"><span></span><span></span></span>
+</button>
+</div>
+</div>
+<nav aria-label="Mobile navigation" class="mobile-menu" id="mobileMenu">
+<a href="services.html">Services</a>
+<a href="https://www.instagram.com/linefiveinteriors?stkn=bTZ6ODJyb3dweXA5&amp;utm_source=qr" rel="noopener" target="_blank">Our Work</a>
+<a href="index.html#process">Process</a>
+<a href="quotation-generator.html">Instant Estimate</a>
+<a href="faq.html">FAQs</a>
+<a href="quotation-generator.html">Start Your Project</a>
+</nav>
+</div>
+</header>
+</div>
+<div class="qg-hero-content">
+<p class="qg-kicker">QUOTATION GENERATOR</p>
+<h1 class="qg-title">Start with the space you want to change.</h1>
+<div class="qg-intro">
+<p class="qg-copy">Choose the service you need and we’ll take you through the right quotation process for your project.</p>
+<p class="qg-hero-note">A simple starting point for kitchens, joinery, bathrooms and renovations.</p>
+</div>
+</div>
+</section>
+<section class="qg-picker" id="services">
+<div class="qg-container">
+<div class="qg-picker-head">
+<div>
+<p class="qg-picker-kicker">CHOOSE YOUR SERVICE</p>
+<h2 class="qg-picker-title">What would you like a quotation for?</h2>
+</div>
+<p class="qg-picker-copy">Select the project that best describes what you’re looking to build, renovate or install.</p>
+</div>
+<div class="qg-grid">
+<a class="qg-card" href="calculator.html">
+<div class="qg-image">
+<img alt="Kitchen design by LineFive" loading="lazy" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/6930022c1c9e6f9060935de7_Untitled%20design-41.png"/>
+<span class="qg-number">01</span>
+<span class="qg-label">Instant estimate</span>
+</div>
+<div class="qg-card-body">
+<div class="qg-card-title-row"><h3 class="qg-card-title">Kitchen</h3><span class="qg-arrow">↗</span></div>
+<p class="qg-card-copy">Cabinetry, worktops, layouts and selected extras.</p>
+<div class="qg-status live"><span class="qg-status-dot"></span>Start calculator</div>
+</div>
+</a>
+<a class="qg-card" href="tv-unit-calculator.html">
+<div class="qg-image">
+<img alt="TV unit design by LineFive" loading="lazy" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/69300006ea0df6fd252221c0_Untitled%20design-40.png"/>
+<span class="qg-number">02</span>
+<span class="qg-label">Instant estimate</span>
+</div>
+<div class="qg-card-body">
+<div class="qg-card-title-row"><h3 class="qg-card-title">TV Unit</h3><span class="qg-arrow">↗</span></div>
+<p class="qg-card-copy">Custom media units, storage, mounting and finishing.</p>
+<div class="qg-status live"><span class="qg-status-dot"></span>Start calculator</div>
+</div>
+</a>
+<a class="qg-card" href="wardrobe-calculator.html">
+<div class="qg-image">
+<img alt="Wardrobe design by LineFive" loading="lazy" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/692edcc5a8c034fd7351479d_Untitled%20design-35.png"/>
+<span class="qg-number">03</span>
+<span class="qg-label">Instant estimate</span>
+</div>
+<div class="qg-card-body">
+<div class="qg-card-title-row"><h3 class="qg-card-title">Wardrobe</h3><span class="qg-arrow">↗</span></div>
+<p class="qg-card-copy">Built-in wardrobes designed around your room and storage needs.</p>
+<div class="qg-status live"><span class="qg-status-dot"></span>Start calculator</div>
+</div>
+</a>
+<a class="qg-card" href="bathroom-renovation-calculator.html">
+<div class="qg-image">
+<img alt="Bathroom renovation by LineFive" loading="lazy" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/693018e9ac1ffc2e9ee368d9_Untitled%20design-43.png"/>
+<span class="qg-number">04</span>
+<span class="qg-label">Instant estimate</span>
+</div>
+<div class="qg-card-body">
+<div class="qg-card-title-row"><h3 class="qg-card-title">Bathroom Renovation</h3><span class="qg-arrow">↗</span></div>
+<p class="qg-card-copy">Bathroom layouts, fittings, plumbing, electrical work and finishes.</p>
+<div class="qg-status live"><span class="qg-status-dot"></span>Start calculator</div>
+</div>
+</a>
+<a class="qg-card service-request" href="quotation-generator.html">
+<div class="qg-image">
+<img alt="Full renovation project by LineFive" loading="lazy" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/692eb388bc80524e10225781_Service%20Image%2001.png"/>
+<span class="qg-number">05</span>
+<span class="qg-label">Complete project</span>
+</div>
+<div class="qg-card-body">
+<div class="qg-card-title-row"><h3 class="qg-card-title">Full Renovation</h3><span class="qg-arrow">↗</span></div>
+<p class="qg-card-copy">A complete property transformation from design through construction and handover.</p>
+<div class="qg-status"><span class="qg-status-dot"></span>Get a tailored quote</div>
+</div>
+</a>
+<a class="qg-card service-request" href="quotation-generator.html">
+<div class="qg-image">
+<img alt="Renovation works by LineFive" loading="lazy" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/693daa69fcf2a6db261078a9_Untitled%20design-54.png"/>
+<span class="qg-number">06</span>
+<span class="qg-label">Selected areas</span>
+</div>
+<div class="qg-card-body">
+<div class="qg-card-title-row"><h3 class="qg-card-title">Partial Renovation</h3><span class="qg-arrow">↗</span></div>
+<p class="qg-card-copy">Renovate specific rooms or areas without taking on a full-property renovation.</p>
+<div class="qg-status"><span class="qg-status-dot"></span>Get a tailored quote</div>
+</div>
+</a>
+</div>
+<p class="qg-note">Estimates are preliminary. Final pricing is confirmed after reviewing the space, measurements, design requirements and project scope.</p>
+</div>
+</section>
+<section class="qg-process">
+<div class="qg-container qg-process-grid">
+<div class="qg-process-intro">
+<p class="qg-process-kicker">HOW IT WORKS</p>
+<h2 class="qg-process-title">One starting point for every project.</h2>
+</div>
+<div>
+<span class="qg-step-num">01</span>
+<h3 class="qg-step-title">Choose your service</h3>
+<p class="qg-step-copy">Tell us whether you’re planning a kitchen, joinery, bathroom or renovation project.</p>
+</div>
+<div>
+<span class="qg-step-num">02</span>
+<h3 class="qg-step-title">Tell us about the space</h3>
+<p class="qg-step-copy">We’ll ask for the measurements, options and project details needed for the quotation.</p>
+</div>
+<div>
+<span class="qg-step-num">03</span>
+<h3 class="qg-step-title">Get your figure</h3>
+<p class="qg-step-copy">Receive a preliminary estimate and move forward to a site review and final quotation.</p>
+</div>
+</div>
+</section>
+<section class="qg-cta">
+<div class="qg-container qg-cta-grid">
+<h2 class="qg-cta-title">Some projects need a more tailored quotation.</h2>
+<div>
+<p class="qg-cta-copy">For full and partial renovations, contact us directly and we’ll discuss the scope, requirements and next steps with you.</p>
+<a class="qg-cta-btn" href="quotation-generator.html">Contact us ↗</a>
+</div>
+</div>
+</section>
+<footer class="qg-footer">
+<div class="qg-container">
+<div class="qg-footer-top">
+<div>
+<h2 class="qg-footer-title">Ready to build your project with LineFive?</h2>
+<a class="qg-footer-btn" href="quotation-generator.html">Get a quote ↗</a>
+</div>
+<div class="qg-footer-links">
+<div>
+<p class="qg-footer-heading">Company</p>
+<a href="services.html">Services</a>
+<a href="quotation-generator.html">Quotation Generator</a>
+</div>
+<div>
+<p class="qg-footer-heading">Pages</p>
+<a href="faq.html">FAQ</a>
+<a href="/terms">Terms &amp; Condition</a>
+<a href="/privacy">Policies</a>
+</div>
+</div>
+</div>
+<div class="qg-footer-bottom">
+<div class="qg-footer-brand">
+<img alt="LineFive" src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/69300b5c97bcea273367be6f_Transparent%20Image-03-3.png"/>
+<p>Develops conceptual design ideas and refines them into detailed plans.</p>
+</div>
+<div class="qg-footer-contact">
+<p>Tesano<br/>Accra, Ghana</p>
+<a href="tel:0534346348">0534346348</a>
+<a href="mailto:info.linefive@gmail.com">info.linefive@gmail.com</a>
+<a href="https://www.instagram.com/linefiveinteriors/" rel="noopener" target="_blank">Instagram ↗</a>
+</div>
+</div>
+</div>
+</footer>
+</main>
+<script>
+    (function(){
+);
+      }
+
+      document.querySelectorAll('.service-request').forEach(function(card){
+        card.addEventListener('click', function(){
+          const service = card.getAttribute('data-service') || 'Project';
+          const requestCopy = document.getElementById('requestCopy');
+          const requestButton = document.getElementById('requestButton');
+          requestCopy.textContent = 'You selected ' + service + '. We’ll start by understanding the space, scope and finish you have in mind, then guide you toward the right quotation.';
+          requestButton.href = 'mailto:info.linefive@gmail.com?subject=' + encodeURIComponent('LineFive ' + service + ' Quotation Request');
+        });
+      });
+    })();
+  </script>
+<script src="site-header.js"></script><script>
+(function(){
+  function closeNav(){
+    const toggle=document.querySelector('.menu-toggle');
+    const menu=document.getElementById('mobileMenu');
+    if(toggle && menu){
+      menu.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded','false');
+      toggle.setAttribute('aria-label','Open menu');
+      document.body.classList.remove('nav-open');
+    }
+  }
+  function init(){
+    const toggle=document.querySelector('.menu-toggle');
+    const menu=document.getElementById('mobileMenu');
+    if(!toggle || !menu) return;
+    if(toggle.dataset.lineFiveReady==='1') return;
+    toggle.dataset.lineFiveReady='1';
+    toggle.addEventListener('click',function(){
+      const open=menu.classList.toggle('open');
+      toggle.classList.toggle('open',open);
+      toggle.setAttribute('aria-expanded',String(open));
+      toggle.setAttribute('aria-label',open?'Close menu':'Open menu');
+      document.body.classList.toggle('nav-open',open);
+    });
+    menu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click',closeNav);
+    });
+    document.addEventListener('keydown',function(event){
+      if(event.key==='Escape' && menu.classList.contains('open')){
+        closeNav();
+        toggle.focus();
+      }
+    });
+    window.addEventListener('resize',function(){
+      if(window.innerWidth>760) closeNav();
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+</body>
+</html>
