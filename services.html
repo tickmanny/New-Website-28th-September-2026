@@ -93,7 +93,7 @@
     .service-action:hover{transform:translateY(-1px);background:#292927;border-color:#292927;color:#fff}
     .service-action.primary{background:#292927;border-color:#292927;color:#fff}
     .service-action.primary:hover{background:#1d1d1b;border-color:#1d1d1b}
-    .service-action.whatsapp::before{content:'↗';margin-right:6px;color:var(--red);font-size:12px}
+    .service-action.whatsapp::before{content:'';display:inline-block;width:10px;height:10px;margin-right:7px;color:var(--red);border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;background:linear-gradient(135deg,transparent 42%,currentColor 43%,currentColor 56%,transparent 57%);transform:translateY(1px)}
     .service-action.primary.whatsapp::before{color:#fff}
 
     .process{width:100%;padding:88px 0 92px;background:var(--dark);color:#fff}
@@ -206,7 +206,24 @@
       .service-actions{flex-direction:column;align-items:stretch}
       .service-action{width:100%}
     }
-  </style>
+  
+    /* Directional arrows: draw with SVG/vector strokes instead of Unicode glyphs.
+       This prevents iOS Safari from rendering ↗ as a colored emoji. */
+    .arrow,.qg-arrow{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:16px;height:16px;flex:0 0 16px;
+      line-height:0;color:currentColor;
+      vertical-align:middle;
+    }
+    .arrow-svg{display:block;width:100%;height:100%;overflow:visible;}
+    .arrow-svg path{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+    .scroll-arrow{
+      display:inline-block;width:8px;height:8px;
+      margin-left:2px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+      transform:rotate(45deg) translateY(-2px);
+      vertical-align:middle;
+    }
+</style>
 
 <style id="linefive-canonical-header">
 /* Exact homepage header shared with all LineFive pages */
@@ -286,7 +303,7 @@
           <p class="eyebrow">SERVICES</p>
           <h1 id="services-title" class="display">One team for the spaces that matter.</h1>
           <p>From a new kitchen to a full renovation, Line Five brings the design and execution together.</p>
-          <a class="hero-link" href="quotation-generator.html">Start Your Project <span>↗</span></a>
+          <a class="hero-link" href="quotation-generator.html">Start Your Project <span class="arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></a>
         </div>
         <div class="hero-image reveal">
           <img src="https://cdn.prod.website-files.com/692eb386bc80524e102256c4/692ec91755930273c371c487_Untitled%20design-29.png" alt="LineFive 3D design and space planning project">
@@ -400,7 +417,7 @@
         <h2 id="cta-heading" class="display reveal">Tell us what you are planning.</h2>
         <div class="reveal">
           <p class="cta-copy">You do not need everything figured out before you speak to us. Start with what you know and we will help you work out the next step.</p>
-          <a class="cta-btn" href="quotation-generator.html">Start Your Project <span class="arrow">↗</span></a>
+          <a class="cta-btn" href="quotation-generator.html">Start Your Project <span class="arrow" aria-hidden="true"><svg class="arrow-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19L19 5M10 5H19V14"/></svg></span></a>
         </div>
       </div>
     </section>
